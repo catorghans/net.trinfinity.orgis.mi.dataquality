@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="net.trinfinity.orgis.mi.dataquality" type="module">
+  <file>dataquality</file>
+  <name>MI Data quality Tools</name>
+  <description>Improve Data Quality by storing unknowns and doubts in your CRM</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Hans Idink</author>
+    <email>hidink@orgis.nl</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">https://github.com/catorghans/net.trinfinity.orgis.mi.dataquality</url>
+    <url desc="Documentation">https://github.com/catorghans/net.trinfinity.orgis.mi.dataquality</url>
+    <url desc="Support">https://github.com/catorghans/net.trinfinity.orgis.mi.dataquality</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2015-06-02</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>4.6</ver>
+  </compatibility>
+  <comments>Improve Data Quality</comments>
+  <civix>
+    <namespace>CRM/Dataquality</namespace>
+  </civix>
+</extension>

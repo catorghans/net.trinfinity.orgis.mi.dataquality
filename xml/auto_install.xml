@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<CustomData>
+  <CustomGroups>
+    <CustomGroup>
+      <name>Pu_fields</name>
+      <title>Pu fields</title>
+      <extends>Contact</extends>
+      <style>Inline</style>
+      <collapse_display>0</collapse_display>
+      <help_pre>&lt;p&gt;Pu is what you do not know or understand.&lt;/p&gt;</help_pre>
+      <help_post>&lt;p&gt;Rate the amount of pu you have about this contact&lt;/p&gt;</help_post>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <table_name>civicrm_value_pu_fields_1</table_name>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>0</collapse_adv_display>
+      <created_date>0000-00-00 00:00:00</created_date>
+      <is_reserved>0</is_reserved>
+    </CustomGroup>
+  </CustomGroups>
+  <CustomFields>
+    <CustomField>
+      <name>Pu_Overview</name>
+      <label>Pu</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_overview_1</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+      <custom_group_name>Pu_fields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Pu_Contact</name>
+      <label>Description</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_contact_2</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Pu_fields</custom_group_name>
+    </CustomField>
+  </CustomFields>
+  <OptionGroups>
+    <OptionGroup>
+      <name>pu_overview_20150601084519</name>
+      <title>Pu - Overview</title>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+    </OptionGroup>
+  </OptionGroups>
+  <OptionValues>
+    <OptionValue>
+      <label>No pu</label>
+      <value>1</value>
+      <name>No_pu</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Tiny bit pu</label>
+      <value>2</value>
+      <name>Tiny_bit_pu</name>
+      <is_default>0</is_default>
+      <weight>2</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>A little bit pu</label>
+      <value>3</value>
+      <name>A_little_bit_pu</name>
+      <is_default>0</is_default>
+      <weight>3</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Some pu</label>
+      <value>4</value>
+      <name>Some_pu</name>
+      <is_default>0</is_default>
+      <weight>4</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Quite some pu</label>
+      <value>5</value>
+      <name>Quite_some_pu</name>
+      <is_default>0</is_default>
+      <weight>5</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>More pu</label>
+      <value>6</value>
+      <name>More_pu</name>
+      <is_default>0</is_default>
+      <weight>6</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>A lot of pu</label>
+      <value>7</value>
+      <name>A_lot_of_pu</name>
+      <is_default>0</is_default>
+      <weight>7</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Mostly pu</label>
+      <value>8</value>
+      <name>Mostly_pu</name>
+      <is_default>0</is_default>
+      <weight>8</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Allmost all pu</label>
+      <value>9</value>
+      <name>Allmost_all_pu</name>
+      <is_default>0</is_default>
+      <weight>9</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>All pu</label>
+      <value>10</value>
+      <name>All_pu</name>
+      <is_default>0</is_default>
+      <weight>10</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+  </OptionValues>
+</CustomData>
