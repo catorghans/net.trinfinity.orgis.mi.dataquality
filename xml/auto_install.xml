@@ -10,12 +10,29 @@
       <collapse_display>0</collapse_display>
       <help_pre>&lt;p&gt;Pu is what you do not know or understand.&lt;/p&gt;</help_pre>
       <help_post>&lt;p&gt;Rate the amount of pu you have about this contact&lt;/p&gt;</help_post>
-      <weight>1</weight>
+      <weight>2</weight>
       <is_active>1</is_active>
       <table_name>civicrm_value_pu_fields_1</table_name>
       <is_multiple>0</is_multiple>
       <collapse_adv_display>0</collapse_adv_display>
       <created_date>0000-00-00 00:00:00</created_date>
+      <is_reserved>0</is_reserved>
+    </CustomGroup>
+    <CustomGroup>
+      <name>puHistoryFields</name>
+      <title>History of pu fields</title>
+      <extends>Activity</extends>
+      <extends_entity_column_value_option_group>activity_type</extends_entity_column_value_option_group>
+      <extends_entity_column_value>puChanges</extends_entity_column_value>
+      <style>Inline</style>
+      <collapse_display>0</collapse_display>
+      <help_pre></help_pre>
+      <help_post></help_post>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <table_name>civicrm_value_pu_history_fields</table_name>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>0</collapse_adv_display>
       <is_reserved>0</is_reserved>
     </CustomGroup>
   </CustomGroups>
@@ -57,6 +74,70 @@
       <in_selector>0</in_selector>
       <custom_group_name>Pu_fields</custom_group_name>
     </CustomField>
+    <CustomField>
+      <name>old_pu_value</name>
+      <label>Old pu value</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>0</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <column_name>old_pu_value</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>old_pu_description</name>
+      <label>Old pu description</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>-101</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <column_name>old_pu_description</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>new_pu_value</name>
+      <label>New pu value</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <column_name>new_pu_value</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_overview_20150601084519</option_group_name>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>new_pu_description</name>
+      <label>New Pu Description</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>-82</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <column_name>new_pu_description</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
   </CustomFields>
   <OptionGroups>
     <OptionGroup>
@@ -65,8 +146,27 @@
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
     </OptionGroup>
+    <OptionGroup>
+      <name>activity_type</name>
+      <title>Activity Type</title>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+      <is_locked>0</is_locked>
+    </OptionGroup>
   </OptionGroups>
   <OptionValues>
+    <OptionValue>
+      <label>Pu Changes</label>
+      <value>52</value>
+      <name>puChanges</name>
+      <filter>0</filter>
+      <is_default>0</is_default>
+      <weight>52</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>activity_type</option_group_name>
+    </OptionValue>
     <OptionValue>
       <label>No pu</label>
       <value>1</value>
