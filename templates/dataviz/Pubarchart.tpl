@@ -1,5 +1,5 @@
 {if !$embedded}
-{php}CRM_Utils_System::setTitle('What kind of pu are your contacts?');{/php}
+{php}CRM_Utils_System::setTitle('Current pu values of your contacts');{/php}
 <div id="dataviz"></div>
 {/if}
 
