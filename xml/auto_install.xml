@@ -82,7 +82,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>0</weight>
+      <weight>-102</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <column_name>old_pu_value</column_name>
@@ -114,7 +114,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>1</weight>
+      <weight>-100</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <column_name>new_pu_value</column_name>
@@ -130,7 +130,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>-82</weight>
+      <weight>-99</weight>
       <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
       <is_view>0</is_view>
@@ -157,11 +157,9 @@
   <OptionValues>
     <OptionValue>
       <label>Pu Changes</label>
-      <value>52</value>
       <name>puChanges</name>
       <filter>0</filter>
       <is_default>0</is_default>
-      <weight>52</weight>
       <is_optgroup>0</is_optgroup>
       <is_reserved>0</is_reserved>
       <is_active>1</is_active>

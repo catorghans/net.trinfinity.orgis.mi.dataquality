@@ -183,9 +183,19 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
         $pu_value_field = Null;
         $pu_description_field = Null;
+        $pu_old_value_field = Null;
+        $pu_old_description_field = Null;
         $pu_value_old = -1;
         $pu_description_old = "";
 
+        $result = civicrm_api3('CustomField', 'get', array(
+          'name' => "old_pu_value",
+        ));
+        if ($result["id"]){ $pu_old_value_field = "custom_".$result["id"]; }
+        $result = civicrm_api3('CustomField', 'get', array(
+          'name' => "old_pu_description",
+        ));
+        if ($result["id"]){ $pu_old_description_field = "custom_".$result["id"]; }
         $result = civicrm_api3('CustomField', 'get', array(
           'name' => "new_pu_value",
         ));
@@ -194,6 +204,9 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
           'name' => "new_pu_description",
         ));
         if ($result["id"]){ $pu_description_field = "custom_".$result["id"]; }
+
+
+
 
         if (isset($pu_value_field) && isset($pu_description_field)){
           
@@ -220,6 +233,8 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
           if ($pu_value != $pu_value_old || $pu_desc != $pu_description_old) {
             $result = civicrm_api3('Activity', 'create', array(
               'activity_type_id' => "puChanges",
+              $pu_old_value_field => $pu_value_old,
+              $pu_old_description_field => $pu_description_old,
               $pu_value_field => $pu_value,
               $pu_description_field => $pu_desc,
               'target_id' => $cid,
