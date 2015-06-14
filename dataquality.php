@@ -199,9 +199,9 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
         $pu_old_action_field = Null;
         $pu_old_how_field = Null;
 
-        $pu_value_old = -1;
+        $pu_value_old = Null;
         $pu_description_old = "";
-        $pu_action_old = -1;
+        $pu_action_old = Null;
         $pu_how_old = "";
 
         $result = civicrm_api3('CustomField', 'get', array(
