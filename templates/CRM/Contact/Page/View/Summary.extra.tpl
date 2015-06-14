@@ -1,6 +1,9 @@
 {crmAPI var='pu_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Overview'}
 {crmAPI var='pu_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_field.id`"}
 {assign var=pu_field_value value="custom_`$pu_field.id`"}
+{crmAPI var='pu_action' entity='CustomField' action='getsingle' sequential=1 name='Pu_Action'}
+{crmAPI var='pu_action_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_action.id`"}
+{assign var=pu_field_action value="custom_`$pu_action.id`"}
 {assign var=pu value="`$pu_value.$pu_field_value`"}
 {if $pu > 0}
  {crmAPI var='pudesc' entity='OptionValue' action='getsingle' sequential=1 option_group_id=$pu_field.option_group_id value=$pu return='label'}
@@ -23,26 +26,30 @@
 
 <script>
 function set_pu_value(){
-  CRM.api('Contact', 'get', {'sequential': 1, 'id': {/literal}{$contactId}{literal}, 'return': '{/literal}{$pu_field_value}{literal}'},
+  CRM.api('Contact', 'get', {'sequential': 1, 'id': {/literal}{$contactId}{literal}, 'return': '{/literal}{$pu_field_value},{$pu_field_action}{literal}'},
      { success: function(data) {   
         pu=data.values[0]["{/literal}{$pu_field_value}{literal}"];
+        puaction=data.values[0]["{/literal}{$pu_field_action}{literal}"];
         if (!pu) {
 	  pusize = "27";
-          putext = "&#8857;";
+          putext = "&#8857";
           pudeco = "none";
-          pucolor="#ffff00";
+          pucolor="#bbbb00";
         }
         else if (pu == 1) {
           pusize = "100";
           putext = "*";
           pudeco = "";
-          pucolor = "#00ff00";
+          pucolor = "#666666";
         }
         else {
           pusize = 7+(pu*10);
           putext = "&#8857;";
           pudeco = "none";
           pucolor="#666666";
+          if (puaction == 1) pucolor = "#0000bb";
+          else if (puaction == 2) pucolor = "#bb0000";
+          else if (puaction == 3) pucolor = "#00bb00";
         }
         cj("#pusign").css("font-size",pusize+"px").css("text-decoration", pudeco).css("color", pucolor).html(putext);
       }

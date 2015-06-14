@@ -75,6 +75,43 @@
       <custom_group_name>Pu_fields</custom_group_name>
     </CustomField>
     <CustomField>
+      <name>Pu_Action</name>
+      <label>Action</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>3</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_action_3</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_action_20150601084519</option_group_name>
+      <custom_group_name>Pu_fields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Pu_How</name>
+      <label>How</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>4</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_how_4</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Pu_fields</custom_group_name>
+    </CustomField>
+    <CustomField>
       <name>old_pu_value</name>
       <label>Old pu value</label>
       <data_type>Int</data_type>
@@ -107,6 +144,41 @@
       <custom_group_name>puHistoryFields</custom_group_name>
     </CustomField>
     <CustomField>
+      <name>old_pu_action</name>
+      <label>Old Action</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>-100</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>old_pu_action</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_action_20150601084519</option_group_name>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>old_pu_how</name>
+      <label>Old How</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>-99</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <column_name>old_pu_how</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
       <name>new_pu_value</name>
       <label>New pu value</label>
       <data_type>Int</data_type>
@@ -114,7 +186,7 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>-100</weight>
+      <weight>-98</weight>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <column_name>new_pu_value</column_name>
@@ -130,11 +202,46 @@
       <is_required>0</is_required>
       <is_searchable>0</is_searchable>
       <is_search_range>0</is_search_range>
-      <weight>-99</weight>
+      <weight>-97</weight>
       <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
       <is_view>0</is_view>
       <column_name>new_pu_description</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>new_pu_action</name>
+      <label>New Action</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>-96</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>new_pu_action</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_action_20150601084519</option_group_name>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>new_pu_how</name>
+      <label>New How</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>-95</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <column_name>new_pu_how</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>puHistoryFields</custom_group_name>
     </CustomField>
@@ -152,6 +259,12 @@
       <is_reserved>1</is_reserved>
       <is_active>1</is_active>
       <is_locked>0</is_locked>
+    </OptionGroup>
+    <OptionGroup>
+      <name>pu_action_20150601084519</name>
+      <title>Pu - Action</title>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
     </OptionGroup>
   </OptionGroups>
   <OptionValues>
@@ -274,6 +387,39 @@
       <is_reserved>0</is_reserved>
       <is_active>1</is_active>
       <option_group_name>pu_overview_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Solve</label>
+      <value>1</value>
+      <name>Solve</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_action_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Avoid</label>
+      <value>2</value>
+      <name>Avoid</name>
+      <is_default>0</is_default>
+      <weight>2</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_action_20150601084519</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Acknowledge</label>
+      <value>3</value>
+      <name>Acknowledge</name>
+      <is_default>0</is_default>
+      <weight>3</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_action_20150601084519</option_group_name>
     </OptionValue>
   </OptionValues>
 </CustomData>
