@@ -70,7 +70,7 @@ function drawGroup (data, nodata) {
     .attr('width', function(d) { return x(barValue(d)); })
     .attr('stroke', 'white')
     .attr('fill', function(d, i) {
-  return "rgb("+ (d.id*30) +","+ (d.id*20) +",255)";
+  return "rgb("+ (d.id*30) +","+ (25+d.id*25) +",255)";
 } );
   // bar value labels
   barsContainer.selectAll("text").data(data).enter().append("text")
