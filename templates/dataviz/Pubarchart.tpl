@@ -1,16 +1,20 @@
 {if !$embedded}
 {php}CRM_Utils_System::setTitle('Current pu values of your contacts');{/php}
-<div id="dataviz"></div>
+<div id="dataviz">
+</div>
+<div>
+Contacts without Pu data: <span id="dvempty"></span></div>
 {/if}
 
 <script>
 (function (name) {ldelim}
 var groups = {crmAPI entity="pu_contact" action="getstat"};
+var empty = {crmAPI entity="pu_contact" action="getemptystat"};
 
 {literal}
-drawGroup(groups.values);
+drawGroup(groups.values, empty.values[0].total);
 
-function drawGroup (data) {
+function drawGroup (data, nodata) {
   var valueLabelWidth = 40; // space reserved for value labels (right)
   var barHeight = 20; // height of one bar
   var barLabelWidth = 200; // space reserved for bar labels
@@ -31,7 +35,7 @@ function drawGroup (data) {
   var chart = d3.select('#dataviz').append("svg")
     .attr("id",name)
     .attr('width', maxBarWidth + barLabelWidth + valueLabelWidth)
-    .attr('height', gridLabelHeight + gridChartOffset + data.length * barHeight);
+    .attr('height', gridLabelHeight + gridChartOffset + data.length * barHeight + 18);
   // grid line labels
   var gridContainer = chart.append('g')
     .attr('transform', 'translate(' + barLabelWidth + ',' + gridLabelHeight + ')'); 
@@ -65,7 +69,9 @@ function drawGroup (data) {
     .attr('height', yScale.rangeBand())
     .attr('width', function(d) { return x(barValue(d)); })
     .attr('stroke', 'white')
-    .attr('fill', 'steelblue');
+    .attr('fill', function(d, i) {
+  return "rgb("+ (d.id*30) +","+ (d.id*20) +",255)";
+} );
   // bar value labels
   barsContainer.selectAll("text").data(data).enter().append("text")
     .attr("x", function(d) { return x(barValue(d)); })
@@ -81,6 +87,8 @@ function drawGroup (data) {
     .attr("y1", -gridChartOffset)
     .attr("y2", yScale.rangeExtent()[1] + gridChartOffset)
     .style("stroke", "#000");
+
+  cj("#dvempty").text(nodata);
 }
   if (name) {
     window[name]=this;
