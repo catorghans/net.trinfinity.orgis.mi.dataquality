@@ -250,28 +250,42 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
         if (isset($pu_value_field) && isset($pu_description_field)){
           
-          $result = civicrm_api3('Activity', 'get', array(
-            'activity_type_id' => "puChanges",
-            'api.ActivityContact.get' => array(
-               'record_type_id' => "Activity Targets",
-               'contact_id' => $cid,
-            ),
-            'options' => array('sort' => "id DESC", 'limit' => 1),
-            'return' => $pu_value_field.",".$pu_description_field.",".$pu_action_field.",".$pu_how_field,
-          ));
-//          CRM_Core_Error::debug_log_message("MI CUSTOM curr activities:".print_r($result,true));
-        
-          if ($result["count"] ==1){
-              foreach ($result["values"] as $previous){ //1 expected
-                   $pu_value_old = $previous[$pu_value_field];
-                   $pu_description_old = $previous[$pu_description_field];
-                   $pu_action_old = $previous[$pu_action_field];
-                   $pu_how_old = $previous[$pu_how_field];
+
+          $error = Null;
+          $is_error = 0;
+          $values = Null;
+          $paramaters = Null;
+
+          $sql = "select h.* 
+            from civicrm_value_pu_history_fields h inner join civicrm_activity a ON h.entity_id = a.id 
+              left join civicrm_activity_contact c on a.id=c.activity_id 
+            where c.contact_id = ".$cid." 
+            and c.record_type_id = 3 
+            order by id desc limit 1;";
+ 
+          try{
+            $errorScope = CRM_Core_TemporaryErrorScope::useException();
+            $dao = CRM_Core_DAO::executeQuery($sql,$parameters);
+            $values = array();
+            while ($dao->fetch()) {
+                $values[] = $dao->toArray();
+            }
+          }
+          catch(Exception $e){
+            $is_error=1;
+            $error = "crmAPI: ".$e->getMessage();
+            $values="";
+          }
+
+          if (is_error == 0){
+              foreach ($values as $previous){ //1 expected
+                   $pu_value_old = $previous["new_pu_value"];
+                   $pu_description_old = $previous["new_pu_description"];
+                   $pu_action_old = $previous["new_pu_action"];
+                   $pu_how_old = $previous["new_pu_how"];
               }
           }
 
-  //        CRM_Core_Error::debug_log_message("MI CUSTOM v old:".$pu_value_old." v new:".$pu_value." d old: ". $pu_description_old. " d new:".$pu_desc);
-         
           if ($pu_value != $pu_value_old || $pu_desc != $pu_description_old || $pu_action != $pu_action_old || $pu_how != $pu_how_old) {
             $result = civicrm_api3('Activity', 'create', array(
               'activity_type_id' => "puChanges",
