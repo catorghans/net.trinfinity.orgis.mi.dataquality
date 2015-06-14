@@ -3,7 +3,7 @@
 <div id="dataviz">
 </div>
 <div>
-Contacts without Pu data: <span id="dvempty"></span></div>
+Contacts without pu data: <span id="dvempty"></span></div>
 {/if}
 
 <script>
