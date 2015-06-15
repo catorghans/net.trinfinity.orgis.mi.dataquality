@@ -7,11 +7,23 @@
         <div class="clearfix"></div>
     </div>
     <div id="puaction">
-        <strong>Action</strong>
+        <strong>Pu Action</strong>
         <a class="reset" href="javascript:actionPie.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         <div class="clearfix"></div>
     </div>
     <div class="clear"></div>
+    <table id="puContactsTable">
+        <thead>
+            <tr class="header">
+                <th>id</th>
+                <th>Name</th>
+                <th>Pu Value</th>
+                <th>Pu Type</th>
+            </tr>
+        </thead>
+    </table>
+
+
 </div>
 <script>
 
@@ -24,7 +36,7 @@
    {literal}
 
         if((!puDetails.is_error)){
-           var valuePie, actionPie;
+           var valuePie, actionPie,dataTable;
             cj(function($) {
 
                 function print_filter(filter){var f=eval(filter);if(typeof(f.length)!="undefined"){}else{}if(typeof(f.top)!="undefined"){f=f.top(Infinity);}else{}if(typeof(f.dimension)!="undefined"){f=f.dimension(function(d){return "";}).top(Infinity);}else{}console.log(filter+"("+f.length+")="+JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));}
@@ -33,12 +45,16 @@
                 var grouped=ndx.groupAll().reduce(function(p,v){ ++p.count; return p; }, function(p,v){p.count-=1;return p;}, function(){return {count:0};});
                 valuePie           = dc.pieChart("#puvalue").radius(100);
                 actionPie           = dc.pieChart("#puaction").radius(100);
+                dataTable           = dc.dataTable("#puContactsTable");
 
                 var value      = ndx.dimension(function(d){return d.name});
                 var valueGroup = value.group().reduceCount();
 
                 var action      = ndx.dimension(function(d){return d.actionname});
                 var actionGroup = action.group().reduceCount();
+
+                var id        = ndx.dimension(function(d){return d.id;});
+
 
                 valuePie
                     .width(220)
@@ -52,6 +68,27 @@
                     .height(220)
                     .dimension(action)
                     .group(actionGroup);
+
+               dataTable
+                    .dimension(id)
+                    .group(function(d){ return ""; })
+                    .columns(
+                        [
+                            function (d) {
+                                return d.id;
+                            },
+                            function (d) {
+                                return d.display_name;
+                            },
+                            function (d) {
+                                return d.name;
+                            },
+                            function (d) {
+                                return d.actionname;
+                            }
+                        ]
+                    );
+
          
                 dc.renderAll();
            });
