@@ -72,13 +72,14 @@
                dataTable
                     .dimension(id)
                     .group(function(d){ return ""; })
+                    .size(25)
                     .columns(
                         [
                             function (d) {
                                 return d.id;
                             },
                             function (d) {
-                                return d.display_name;
+                                return "<a href='/civicrm/contact/view?reset=1&cid="+d.id+"'>"+d.display_name+"</a>";
                             },
                             function (d) {
                                 return d.name;
