@@ -121,7 +121,7 @@
       <is_search_range>0</is_search_range>
       <weight>-102</weight>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <column_name>old_pu_value</column_name>
       <in_selector>0</in_selector>
       <option_group_name>pu_overview_20150601084519</option_group_name>
@@ -138,7 +138,7 @@
       <weight>-101</weight>
       <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <column_name>old_pu_description</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>puHistoryFields</custom_group_name>
@@ -153,7 +153,7 @@
       <is_search_range>0</is_search_range>
       <weight>-100</weight>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
@@ -173,7 +173,7 @@
       <weight>-99</weight>
       <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <column_name>old_pu_how</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>puHistoryFields</custom_group_name>
@@ -188,7 +188,7 @@
       <is_search_range>0</is_search_range>
       <weight>-98</weight>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <column_name>new_pu_value</column_name>
       <in_selector>0</in_selector>
       <option_group_name>pu_overview_20150601084519</option_group_name>
@@ -205,7 +205,7 @@
       <weight>-97</weight>
       <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <column_name>new_pu_description</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>puHistoryFields</custom_group_name>
@@ -220,7 +220,7 @@
       <is_search_range>0</is_search_range>
       <weight>-96</weight>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <text_length>255</text_length>
       <note_columns>60</note_columns>
       <note_rows>4</note_rows>
@@ -240,7 +240,7 @@
       <weight>-95</weight>
       <attributes>rows=4, cols=60</attributes>
       <is_active>1</is_active>
-      <is_view>0</is_view>
+      <is_view>1</is_view>
       <column_name>new_pu_how</column_name>
       <in_selector>0</in_selector>
       <custom_group_name>puHistoryFields</custom_group_name>
@@ -274,7 +274,7 @@
       <filter>0</filter>
       <is_default>0</is_default>
       <is_optgroup>0</is_optgroup>
-      <is_reserved>0</is_reserved>
+      <is_reserved>1</is_reserved>
       <is_active>1</is_active>
       <option_group_name>activity_type</option_group_name>
     </OptionValue>
