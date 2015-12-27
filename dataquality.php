@@ -125,16 +125,21 @@ function dataquality_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 /**
  * Functions below this ship commented out. Uncomment as required.
  *
+*/
 
-/**
- * Implements hook_civicrm_preProcess().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function dataquality_civicrm_preProcess($formName, &$form) {
+
+function dataquality_civicrm_pre($op, $objectName, $id, &$params){
+  // print " pre:".$op." ".$objectName;
 
 }
 
+
+/**
+ * Implements hook_civicrm_custom().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_custom
+ *
+ * create an history activity whenever Pu data is changed
 */
 
 function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
@@ -151,6 +156,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
      CRM_Core_Error::debug_log_message("MI CUSTOM error:".$e->getMessage().$op." ".$groupID." ".$entityID." ".print_r($params,true));
      return;
    }
+
 
    if ($result["name"] == "Pu_fields"){
      $pu_value=-1;
@@ -186,7 +192,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
         } catch (Exception $e){}
 
         if ($resultov["label"]){
-            $subject .= $resultov["label"];          
+            $subject .= $resultov["label"];
         }
 
         $pu_value_field = Null;
@@ -203,6 +209,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
         $pu_description_old = "";
         $pu_action_old = Null;
         $pu_how_old = "";
+
 
         $result = civicrm_api3('CustomField', 'get', array(
           'name' => "old_pu_value",
@@ -249,20 +256,20 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
 
         if (isset($pu_value_field) && isset($pu_description_field)){
-          
+
 
           $error = Null;
           $is_error = 0;
           $values = Null;
-          $paramaters = Null;
+          $parameters = array();
 
-          $sql = "select h.* 
+          $sql = "select h.*
             from civicrm_value_pu_history_fields h inner join civicrm_activity a ON h.entity_id = a.id 
               left join civicrm_activity_contact c on a.id=c.activity_id 
-            where c.contact_id = ".$cid." 
-            and c.record_type_id = 3 
+            where c.contact_id = ".$cid."
+            and c.record_type_id = 3
             order by id desc limit 1;";
- 
+
           try{
             $errorScope = CRM_Core_TemporaryErrorScope::useException();
             $dao = CRM_Core_DAO::executeQuery($sql,$parameters);
@@ -277,7 +284,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
             $values="";
           }
 
-          if (is_error == 0){
+          if ($is_error == 0){
               foreach ($values as $previous){ //1 expected
                    $pu_value_old = $previous["new_pu_value"];
                    $pu_description_old = $previous["new_pu_description"];
@@ -301,11 +308,64 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
               'target_id' => $cid,
               'subject' => $subject,
-            ));        
+            ));
          }
         }
      }
-  
+
    }
-   
+
 }
+
+function dataquality_civicrm_permission(&$permissions) {
+  $version = CRM_Utils_System::version();
+  if (version_compare($version, '4.6.1') >= 0) {
+    $permissions += array(
+      'access Pu Fields' => array(
+        ts('Access Pu Fields', array('domain' => 'net.trinfinity.orgis.mi.dataquality')),
+        ts('Grants the necessary permissions to access the Pu Fields', array('domain' => 'net.trinfinity.orgis.mi.dataquality')),
+      ),
+    );
+  }
+  else {
+    $permissions += array(
+      'access Pu Fields' => ts('Access Pu Fields', array('domain' => 'net.trinfinity.orgis.mi.dataquality')),
+    );
+  }
+}
+
+/**
+ * @param $op
+ * @param $objectName
+ * @param $objectId
+ * @param $objectRef
+ */
+function dataquality_civicrm_post($op, $objectName, $objectId, &$objectRef ){
+  if ($objectName == "GroupContact"){
+    if ($op == "create"){
+     CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
+    }
+    elseif ($op == "delete") {
+     CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
+    }
+
+  }
+
+}
+
+/**
+ * @param $dao
+ */
+function dataquality_civicrm_postSave_civicrm_group_contact_cache ($dao) {
+     CRM_Core_Error::debug_log_message("MI group contact cache:".print_r($dao,true));
+
+}
+
+/**
+ * @param $dao
+ */
+function dataquality_civicrm_postSave_civicrm_group_contact ($dao) {
+     CRM_Core_Error::debug_log_message("MI group contact:".print_r($dao,true));
+
+}
+
