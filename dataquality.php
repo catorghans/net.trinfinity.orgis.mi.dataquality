@@ -210,6 +210,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
         $pu_action_old = Null;
         $pu_how_old = "";
 
+         //get field names
 
         $result = civicrm_api3('CustomField', 'get', array(
           'name' => "old_pu_value",
@@ -254,7 +255,6 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
 
 
-
         if (isset($pu_value_field) && isset($pu_description_field)){
 
 
@@ -294,7 +294,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
           }
 
           if ($pu_value != $pu_value_old || $pu_desc != $pu_description_old || $pu_action != $pu_action_old || $pu_how != $pu_how_old) {
-            $result = civicrm_api3('Activity', 'create', array(
+      /*      $result = civicrm_api3('Activity', 'create', array(
               'activity_type_id' => "puChanges",
               $pu_old_value_field => $pu_value_old,
               $pu_old_description_field => $pu_description_old,
@@ -308,7 +308,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
               'target_id' => $cid,
               'subject' => $subject,
-            ));
+            ));*/
          }
         }
      }
@@ -341,15 +341,243 @@ function dataquality_civicrm_permission(&$permissions) {
  * @param $objectRef
  */
 function dataquality_civicrm_post($op, $objectName, $objectId, &$objectRef ){
+  if ($objectName == "Individual" || $objectName == "Household" || $objectName == "Organization"){
+      if ($op == "create" || $op == "edit" || $op == "restore"){
+          _dataquality_pu_automation($objectId);
+      }
+  }
+
   if ($objectName == "GroupContact"){
     if ($op == "create"){
      CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
+       // CRM_Core_Error::debug_log_message("MI group".print_r(CRM_Contact_BAO_SavedSearch::contactIDsSQL(2),true));
+       // CRM_Contact_BAO_GroupContactCache::contactGroup()
     }
     elseif ($op == "delete") {
      CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
     }
 
   }
+
+}
+
+/**
+ * @param $objectName
+ * @param $contactid
+ * @param $objectRef
+ */
+function _dataquality_pu_automation($contactid){
+   //Get open pu activities
+
+    //get field names
+    $pu_value_field = Null;
+    $pu_description_field = Null;
+    $pu_action_field = Null;
+    $pu_how_field = Null;
+    $pu_automationtype_field = Null;
+    $pu_automation_field = Null;
+    $pu_value_addition_field = Null;
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' => "new_pu_value",
+    ));
+    if ($result["id"]){ $pu_value_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' => "new_pu_description",
+    ));
+    if ($result["id"]){ $pu_description_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' => "new_pu_action",
+    ));
+    if ($result["id"]){ $pu_action_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' => "new_pu_how",
+    ));
+    if ($result["id"]){ $pu_how_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' => "Automation_Type",
+    ));
+    if ($result["id"]){ $pu_automationtype_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' =>  "Pu_Automation",
+    ));
+    if ($result["id"]){ $pu_automation_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' =>  "Pu_value_addition",
+    ));
+    if ($result["id"]){ $pu_value_addition_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' =>  "Automated_Pu_Description",
+    ));
+    if ($result["id"]){ $pu_automation_description_field = "custom_".$result["id"]; }
+
+
+    /*
+     $result = civicrm_api3('Activity', 'get', array(
+        'sequential' => 1,
+        'return' => $pu_value_field.",".$pu_action_field.",".$pu_automationtype_field.",".$pu_automation_field,
+        'activity_type_id' => "puChanges",
+        'status_id' => "Scheduled",
+        'api.ActivityContact.get' => array('record_type_id' => "Activity Targets", 'contact_id' => $objectId),
+        'options' => array('limit' => 1000),
+    ));
+    CRM_Core_Error::debug_log_message(print_r($result,true));
+    */
+    //get open pu activities
+    $error = Null;
+    $is_error = 0;
+    $pu_activities = Null;
+    $parameters = array();
+
+    $sql = "select h.*
+            from civicrm_value_pu_history_fields h inner join civicrm_activity a ON h.entity_id = a.id
+              left join civicrm_activity_contact c on a.id=c.activity_id
+            where c.contact_id = ".$contactid."
+            and c.record_type_id = 3
+            and a.status_id = 1
+            order by id desc;";
+
+    try{
+        $errorScope = CRM_Core_TemporaryErrorScope::useException();
+        $dao = CRM_Core_DAO::executeQuery($sql,$parameters);
+        $pu_activities = array();
+        while ($dao->fetch()) {
+            $pu_activities[] = $dao->toArray();
+        }
+    }
+    catch(Exception $e){
+        $is_error=1;
+        $error = "crmAPI: ".$e->getMessage();
+        $pu_activities="";
+    }
+
+    if ($is_error == 0) {
+      /*  foreach ($pu_activities as $previous) { //1 expected
+
+        }
+        */
+     //   CRM_Core_Error::debug_log_message(print_r($pu_activities,true));
+    }
+
+
+
+    //Get pu Groups
+
+    $resultgroups = civicrm_api3('Group', 'get', array(
+        'sequential' => 1,
+        'return' => "id,name,saved_search_id,".$pu_value_addition_field.",title",
+         $pu_value_addition_field => array('>=' => 1),
+        'is_active' => 1,
+        'options' => array('limit' => 100000),
+    ));
+//    CRM_Core_Error::debug_log_message(print_r($resultgroups,true));
+
+    //get all smart groups this contact is member from
+    $contactgroups = CRM_Contact_BAO_GroupContactCache::contactGroup($contactid);
+//    CRM_Core_Error::debug_log_message("contactgroups:".print_r($contactgroups,true));
+
+    $pu_automation_type_start = "G"; //pu automation of type G (group)
+
+    //foreach group
+    if ($resultgroups["is_error"] == 0){
+        foreach ($resultgroups["values"] as $group){
+            if ($group[$pu_value_addition_field] > 0){
+                //if smart group
+                if (isset($group["saved_search_id"]) && $group["saved_search_id"]){
+                    //is current user part of group?
+                    $currentusergroupmember = false;
+
+                    if (isset($contactgroups["group"])) foreach($contactgroups["group"] as $contactgroup){
+                        if ($group["id"] == $contactgroup["id"]){
+                            $currentusergroupmember = true;
+                            break;
+                        }
+
+                    }
+
+                    //if user is group member
+                    if ($currentusergroupmember == true) {
+                        //if no activity exists, create it
+                        $activity_found = false;
+                        foreach ($pu_activities as $pu_activity) {
+                            if ($pu_activity["automation_type_74"] == $pu_automation_type_start.$group["id"]) {
+                                $activity_found = true;
+                                break;
+                            }
+                        }
+                        if (!$activity_found){
+                            //create activity
+                            $pu_value = $group[$pu_value_addition_field];
+                            $pu_desc = $group[$pu_automation_description_field]?$group[$pu_automation_description_field]:"";
+                            $pu_action = "";
+                            $pu_how = "";
+                            $subject = $pu_desc;
+                            $params = array("activity_type_id" => "puChanges",
+                                "status_id" => 1,
+                                 $pu_value_field => $pu_value,
+                                 $pu_description_field => $pu_desc,
+                                 $pu_action_field => $pu_action,
+                                 $pu_how_field => $pu_how,
+                                 'target_id' => $contactid,
+                                 'subject' => $subject,
+                                 $pu_automationtype_field => $pu_automation_type_start.$group["id"],
+                                 $pu_automation_field => 1,
+                            );
+                            $resultactivity = civicrm_api3('Activity', 'create', $params);
+                            CRM_Core_Error::debug_log_message("pu activity created:".print_r($resultactivity,true));
+
+
+                        }
+                    }
+
+
+                    //if user is not group member
+                    else {
+                        //if activity exists, delete it
+                        $activity_found = false;
+                        foreach ($pu_activities as $pu_activity) {
+                            if ($pu_activity["automation_type_74"] == $pu_automation_type_start.$group["id"]) {
+                                $activity_found = true;
+                                //close it
+                                $params = array("id" => $pu_activity["entity_id"],
+                                    "status_id" => 2);
+                                $resultactivity = civicrm_api3('Activity', 'create', $params);
+                                CRM_Core_Error::debug_log_message("pu activity updated:".print_r($resultactivity,true));
+                                break;
+                            }
+                        }
+                    }
+
+
+                }
+                //if normal group
+                else {
+                    //is current user part of group?
+
+                    //is there an open pu activity with this group
+
+                }
+
+
+
+
+
+
+            }
+        }
+
+    }
+
+
+
+    //recalc pu
 
 }
 
@@ -366,6 +594,8 @@ function dataquality_civicrm_postSave_civicrm_group_contact_cache ($dao) {
  */
 function dataquality_civicrm_postSave_civicrm_group_contact ($dao) {
      CRM_Core_Error::debug_log_message("MI group contact:".print_r($dao,true));
+
+
 
 }
 

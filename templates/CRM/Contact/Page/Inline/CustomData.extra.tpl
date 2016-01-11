@@ -1,3 +1,3 @@
 {literal}<script>
-if (typeof set_pu_value == 'function') { set_pu_value(); }
+if (typeof set_pu == 'function') { set_pu(); }
 </script>{/literal}

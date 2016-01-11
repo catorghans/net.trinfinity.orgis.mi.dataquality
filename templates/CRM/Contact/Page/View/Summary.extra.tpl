@@ -1,4 +1,16 @@
 {crmAPI var='pu_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Overview'}
+{crmAPI var='pu_activity_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_value'}
+{assign var=pu_activity_field_value value="custom_`$pu_activity_field.id`"}
+{crmAPI var='pu_activity_desc_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_description'}
+{assign var=pu_activity_desc_field_value value="custom_`$pu_activity_desc_field.id`"}
+{crmAPI var='pu_activity_aut_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Automation'}
+{assign var=pu_activity_aut_field_value value="custom_`$pu_activity_aut_field.id`"}
+{crmAPI var='pu_activity_how_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_how'}
+{assign var=pu_activity_how_field_value value="custom_`$pu_activity_how_field.id`"}
+{crmAPI var='pu_activity_action_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_action'}
+{assign var=pu_activity_action_field_value value="custom_`$pu_activity_action_field.id`"}
+
+
 {crmAPI var='pu_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_field.id`"}
 {assign var=pu_field_value value="custom_`$pu_field.id`"}
 {crmAPI var='pu_action' entity='CustomField' action='getsingle' sequential=1 name='Pu_Action'}
@@ -20,15 +32,44 @@
 {literal}
 <style>
   .Pu_fields textarea { width: 90%;}
-  .Pu_fields crm-form-select { width: 30% !important;}
+  .Pu_fields .crm-form-select { width: 30% !important;}
 
 </style>
 
 <script>
-function set_pu_value(){
+
+
+function set_pu(){
+    puField = "{/literal}{$pu_activity_field_value}{literal}";
+    puDescField = "{/literal}{$pu_activity_desc_field_value}{literal}";
+    puAutField = "{/literal}{$pu_activity_aut_field_value}{literal}";
+    puHowField = "{/literal}{$pu_activity_how_field_value}{literal}";
+    puActionField = "{/literal}{$pu_activity_action_field_value}{literal}";
+    CRM.api3('Activity', 'get', {
+        "sequential": 1,
+        "target_contact_id": {/literal}{$contactId}{literal},
+        "status_id":"Scheduled",
+        "activity_type_id":"puChanges",
+        "return": "subject,"+puField+","+puDescField+","+puAutField+","+puActionField+","+puActionField
+    }).done(function(result) {
+        puValue = 0;
+        for (i = 0; i < result.values.length; i++)
+        {
+            activity = result.values[i];
+            puValue = puValue + parseInt(activity[puField]);
+            console.log(activity[puField]+":"+activity[puDescField]+";"+activity[puActionField]+":"+activity[puHowField]+" - "+activity[puAutField]);
+            //  console.log(result.values[i]);
+        }
+        set_pu_value(puValue);
+
+    });
+
+}
+
+function set_pu_value(pu){
   CRM.api('Contact', 'get', {'sequential': 1, 'id': {/literal}{$contactId}{literal}, 'return': '{/literal}{$pu_field_value},{$pu_field_action}{literal}'},
      { success: function(data) {   
-        pu=data.values[0]["{/literal}{$pu_field_value}{literal}"];
+      //  pu=data.values[0]["{/literal}{$pu_field_value}{literal}"];
         puaction=data.values[0]["{/literal}{$pu_field_action}{literal}"];
         if (!pu) {
 	  pusize = "27";
@@ -43,6 +84,7 @@ function set_pu_value(){
           pucolor = "#666666";
         }
         else {
+          if (pu > 10) pu = 10;
           pusize = 7+(pu*10);
           putext = "&#8857;";
           pudeco = "none";
@@ -69,13 +111,15 @@ cj(document).ready(function($) {
  });
  cj("#crm-container").prepend(cj("#pufield"));
  cj(".crm-summary-block").load(function(){
-   set_pu_value();
+   set_pu();
    if (!$('#pufield').is(':hover')) {
      cj(".Pu_fields").hide();
    }
 
  });
- set_pu_value();
+ set_pu();
+
+
 });
 
 
