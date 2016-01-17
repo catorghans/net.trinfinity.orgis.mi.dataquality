@@ -33,6 +33,23 @@
 <style>
   .Pu_fields textarea { width: 90%;}
   .Pu_fields .crm-form-select { width: 30% !important;}
+  .pu_activity.automated {
+      background-color: #F6F6F2;
+  }
+  .pu_activity.manual{
+      cursor: pointer;
+  }
+  #pu_activities {
+     border: 1px solid black;
+      float:right;
+      width: 70%;
+      top: -30px;
+      position: relative;
+  }
+  #pu_add_sign {
+     padding: 3px;
+     cursor: pointer;
+  }
 
 </style>
 
@@ -53,16 +70,119 @@ function set_pu(){
         "return": "subject,"+puField+","+puDescField+","+puAutField+","+puActionField+","+puActionField
     }).done(function(result) {
         puValue = 0;
+        if (document.contains(document.getElementById("pu_activities"))) {
+            document.getElementById("pu_activities").remove();
+        }
+        puhtml = document.createElement("div");
+        puhtml.setAttribute("id","pu_activities");
+        puheader = document.createElement("div");
+
+
+        puaddsign = document.createElement("span");
+        puaddsign.setAttribute("id", "pu_add_sign");
+        puaddsign.innerHTML = "+";
+        puaddsign.setAttribute("title", "Add new Pu activity");
+        puheader.appendChild(puaddsign);
+        puheadertext = document.createElement("span");
+        puheadertext.innerHTML = " <b>Pu Fields</b>";
+        puheader.appendChild(puheadertext);
+
+        puhtml.appendChild(puheader);
+        pumanual = document.createElement("div");
+        puautomated = document.createElement("div");
+
         for (i = 0; i < result.values.length; i++)
         {
+            puactivity = document.createElement("div");
             activity = result.values[i];
             puValue = puValue + parseInt(activity[puField]);
             console.log(activity[puField]+":"+activity[puDescField]+";"+activity[puActionField]+":"+activity[puHowField]+" - "+activity[puAutField]);
+            value = activity[puField];
+            action = activity[puActionField];
+            strsign = get_mini_pu_value(value, action);
+
+            innerHTML = strsign+" "+activity[puDescField];
+            if (activity[puHowField]){
+                innerHTML = innerHTML+": "+activity[puHowField];
+            }
+
+            puactivity.innerHTML = innerHTML;
+            puclass = "pu_activity manual";
+            activitytext = " Click to Edit";
+            parentdiv = pumanual;
+
+            if (activity[puAutField] == 1){
+                puclass = "pu_activity automated";
+                activitytext = " Automated";
+                parentdiv = puautomated;
+            }
+
+            actionclass = "";
+            title = "";
+            switch (action){
+                case "1": actionclass = " solve";
+                    break;
+                case "2": actionclass = " avoid";
+                    break;
+                case "3": actionclass = " acknowledge";
+            }
+            switch (value){
+                case "1": putext = "A bit pu";
+                    break;
+                case "2": putext = "More pu";
+                    break;
+                case "3": putext = "A lot of pu";
+                    break;
+
+            }
+            title = putext + " - "+activitytext;
+
+            puactivity.setAttribute("class", puclass+actionclass);
+            puactivity.setAttribute("title", title);
+            parentdiv.appendChild(puactivity);
             //  console.log(result.values[i]);
         }
+        puhtml.appendChild(pumanual);
+        puhtml.appendChild(puautomated);
+        puhtml.style.display = "none";
+        pufield = document.getElementById("pufield");
+        pufield.appendChild(puhtml);
         set_pu_value(puValue);
 
     });
+
+}
+
+function get_mini_pu_value(pu, puaction) {
+  var ret = "";
+    pusize = "15";
+    pucolor = "#000000";
+    putext = "&#8857;";
+    putitle = "";
+    switch (pu){
+        case "1":
+            break;
+        case "2":
+            pusize = "19";
+            break;
+        case "3":
+            pusize = "24";
+    }
+    switch (puaction){
+        case "1":
+            pucolor = "#0000bb";
+            putitle = "solve";
+            break;
+        case "2":
+            pucolor = "#bb0000";
+            putitle = "avoid";
+            break;
+        case "3":
+            pucolor = "#00bb00";
+            putitle = "acknowlegde";
+    }
+    ret = "<span style='font-size:"+pusize+"px;color:"+pucolor+";' title='"+putitle+"'>"+putext+"</span>";
+    return ret;
 
 }
 
@@ -102,11 +222,16 @@ function set_pu_value(pu){
 cj(document).ready(function($) {
  cj("#pufield").append(cj(".Pu_fields"));
  cj(".Pu_fields").css("width", "50%").css("float","right").css("top","-30px").css("position", "relative").hide();
+
+    cj("#pu_activities").css("width", "50%").css("float","right").css("top","-30px").css("position", "relative").hide();
+
  cj("#pufield").hover(function(){
-  cj(".Pu_fields").show();   
+  cj(".Pu_fields").hide();
+     cj("#pu_activities").show();
  }, function(){
   if(cj("#pufield .crm-inline-edit.form").length==0){
    cj(".Pu_fields").hide();
+      cj("#pu_activities").hide();
   }
  });
  cj("#crm-container").prepend(cj("#pufield"));
@@ -114,6 +239,7 @@ cj(document).ready(function($) {
    set_pu();
    if (!$('#pufield').is(':hover')) {
      cj(".Pu_fields").hide();
+       cj("#pu_activities").hide();
    }
 
  });
