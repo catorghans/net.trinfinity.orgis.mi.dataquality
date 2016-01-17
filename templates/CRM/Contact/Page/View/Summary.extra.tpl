@@ -38,6 +38,10 @@
   }
   .pu_activity.manual{
       cursor: pointer;
+
+  }
+  .pu_activity.manual:hover {
+      border: 2px dashed #D3D3D3;
   }
   #pu_activities {
      border: 1px solid black;
@@ -50,18 +54,228 @@
      padding: 3px;
      cursor: pointer;
   }
+  #pu_header:hover {
+      cursor: pointer;
+      border: 2px dashed #D3D3D3;
+  }
 
 </style>
 
 <script>
 
+    function create_pu_form(activity_id){
+        contact_id = "{/literal}{$contactId}{literal}";
 
+        puvalue = "";
+        pudescription = "";
+        puaction = "";
+        putype = "0"; //manual
+        puhow = "";
+        puField = "{/literal}{$pu_activity_field_value}{literal}";
+        puDescField = "{/literal}{$pu_activity_desc_field_value}{literal}";
+        puAutField = "{/literal}{$pu_activity_aut_field_value}{literal}";
+        puHowField = "{/literal}{$pu_activity_how_field_value}{literal}";
+        puActionField = "{/literal}{$pu_activity_action_field_value}{literal}";
+
+
+        if (activity_id){ //edit
+
+            //load activity
+            CRM.api3('Activity', 'get', {
+                "sequential": 1,
+                "target_contact_id": {/literal}{$contactId}{literal},
+                "status_id":"Scheduled",
+                "activity_type_id":"puChanges",
+                "id": activity_id,
+                "return": "subject,"+puField+","+puDescField+","+puAutField+","+puActionField+","+puActionField
+            }).done(function(result) {
+                // 1 expected
+                if (result["is_error"] == "0" && result["count"] == "1" ){
+                    activity = result["values"][0];
+                    puvalue = activity[puField];
+                    pudescription = activity[puDescField];
+                    puhow = activity[puHowField];
+                    puaction = activity[puActionField];
+                    create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow);
+                }
+            });
+        }
+        else {
+            create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow);
+        }
+
+        //create form
+
+    }
+    function create_pu_html_form(id, puvalue, pudescription, puaction, puhow){
+        console.log ( "activity "+id+" "+puvalue+" "+pudescription+" "+puhow+" "+puaction);
+
+
+        puform = document.createElement("form");
+        puform.setAttribute("id", "puform");
+
+        putable = document.createElement("table");
+        putable.setAttribute("class", "crm-inline-edit-form");
+
+        puheader = document.createElement("tr");
+        puheadercell = document.createElement("th");
+        puheadercell.innerHTML = "<b>Pu Fields</b>" +
+               ' <div class="crm-inline-button"> '+
+                '<span class="crm-button crm-button-type-upload crm-button_qf_CustomData_upload crm-icon-button">'+
+                '<span class="crm-button-icon ui-icon-check"> </span>          <input class="crm-form-submit default validate" accesskey="S" crm-icon="check" name="_qf_CustomData_upload" value="Save" id="_qf_CustomData_upload" type="submit">'+
+                '</span><span class="crm-button crm-button-type-cancel crm-button_qf_CustomData_cancel crm-icon-button">'+
+                '<span class="crm-button-icon ui-icon-close"> </span>          <input class="crm-form-submit cancel" crm-icon="close" name="_qf_CustomData_cancel" value="Cancel" id="_qf_CustomData_cancel" type="submit" onclick="cancel_pu_form();return false;">'+
+                '</span></div>'+
+                "<div class='messages help'><p>Pu is what you do not know or understand.</p></div>";
+        puheadercell.setAttribute("colspan", "2");
+
+        puheader.appendChild(puheadercell);
+        putable.appendChild(puheader);
+
+        putr = document.createElement("tr");
+        putdlabel = document.createElement("td");
+        putdlabel.innerHTML = "<label>Pu</label>";
+
+        putdfield = document.createElement("td");
+
+        puhtmlvalue = "<select id='puform_value' >";
+        for (i = 1; i <= 3; i++){
+            selected = "";
+            if (parseInt(puvalue) == i){
+                selected = " selected";
+            }
+            puhtmlvalue += "<option value='"+i+"' "+selected+">"+i+"</option>";
+        }
+        puhtmlvalue += "</select>";
+
+        putdfield.innerHTML = puhtmlvalue;
+
+        putr.appendChild(putdlabel);
+        putr.appendChild(putdfield);
+
+        putable.appendChild(putr);
+
+        putr = document.createElement("tr");
+        putdlabel = document.createElement("td");
+        putdlabel.innerHTML = "<label>Description</label>";
+
+        putdfield = document.createElement("td");
+
+        el = document.createElement("textarea");
+        el.setAttribute("id", "puform_description");
+        el.innerHTML = pudescription;
+
+        putdfield.appendChild(el);
+
+        putr.appendChild(putdlabel);
+        putr.appendChild(putdfield);
+
+        putable.appendChild(putr);
+
+
+        putr = document.createElement("tr");
+        putdlabel = document.createElement("td");
+        putdlabel.innerHTML = "<label>Action</label>";
+
+        putdfield = document.createElement("td");
+
+        puhtmlvalue = "<select id='puform_action' >";
+
+        s = { 1: "solve", 2: "circumvent", 3: "acknowledge" }
+
+        for (i = 1; i <= 3; i++){
+            selected = "";
+            if (parseInt(puaction) == i){
+                selected = " selected";
+            }
+            puhtmlvalue += "<option value='"+i+"' "+selected+">"+s[i]+"</option>";
+        }
+        puhtmlvalue += "</select>";
+
+
+        putdfield.innerHTML = puhtmlvalue;
+
+        putr.appendChild(putdlabel);
+        putr.appendChild(putdfield);
+
+        putable.appendChild(putr);
+
+        putr = document.createElement("tr");
+        putdlabel = document.createElement("td");
+        putdlabel.innerHTML = "<label>How</label>";
+
+        putdfield = document.createElement("td");
+
+        el = document.createElement("textarea");
+        el.setAttribute("id", "puform_how");
+        el.innerHTML = puhow;
+
+        putdfield.appendChild(el);
+
+        putr.appendChild(putdlabel);
+        putr.appendChild(putdfield);
+
+        putable.appendChild(putr);
+
+
+        puform.appendChild(putable);
+        puactivities = document.getElementById("pu_activities");
+        puactivities.innerHTML= "";
+
+        puactivities.appendChild(puform);
+
+        puform.setAttribute("onsubmit", "process_pu_form('"+id+"'); return false;");
+    }
+ function process_pu_form(id){
+     contact_id = "{/literal}{$contactId}{literal}";
+     puField = "{/literal}{$pu_activity_field_value}{literal}";
+     puDescField = "{/literal}{$pu_activity_desc_field_value}{literal}";
+     puAutField = "{/literal}{$pu_activity_aut_field_value}{literal}";
+     puHowField = "{/literal}{$pu_activity_how_field_value}{literal}";
+     puActionField = "{/literal}{$pu_activity_action_field_value}{literal}";
+
+     puform = document.getElementById("puform");
+     puvalue = document.getElementById("puform_value").value;
+     pudescription = document.getElementById("puform_description").value;
+     puaction = document.getElementById("puform_action").value;
+     puhow = document.getElementById("puform_how").value;
+     params = {
+         "activity_type_id":"puChanges",
+         "target_contact_id" : contact_id,
+         "status_id":"Scheduled",
+         "subject": pudescription,
+     }
+     params[puField] = puvalue;
+     params[puDescField] = pudescription;
+     params[puHowField] = puhow;
+     params[puActionField] = puaction;
+     if (id) {
+         params["id"] = id;
+     }
+     console.log(params);
+
+     CRM.api3('Activity', 'create', params).done(function(result) {
+         console.log(result);
+         pu_activities = document.getElementById("pu_activities");
+         pu_activities.innerHTML = "";
+         set_pu();
+     });
+ }
+
+
+    function cancel_pu_form(){
+        pu_activities = document.getElementById("pu_activities");
+        pu_activities.innerHTML = "";
+        set_pu();
+
+    }
 function set_pu(){
     puField = "{/literal}{$pu_activity_field_value}{literal}";
     puDescField = "{/literal}{$pu_activity_desc_field_value}{literal}";
     puAutField = "{/literal}{$pu_activity_aut_field_value}{literal}";
     puHowField = "{/literal}{$pu_activity_how_field_value}{literal}";
     puActionField = "{/literal}{$pu_activity_action_field_value}{literal}";
+    contact_id = "{/literal}{$contactId}{literal}";
     CRM.api3('Activity', 'get', {
         "sequential": 1,
         "target_contact_id": {/literal}{$contactId}{literal},
@@ -76,16 +290,18 @@ function set_pu(){
         puhtml = document.createElement("div");
         puhtml.setAttribute("id","pu_activities");
         puheader = document.createElement("div");
+        puheader.setAttribute("id", "pu_header");
 
 
         puaddsign = document.createElement("span");
         puaddsign.setAttribute("id", "pu_add_sign");
         puaddsign.innerHTML = "+";
-        puaddsign.setAttribute("title", "Add new Pu activity");
+        puheader.setAttribute("title", "Add new Pu activity");
         puheader.appendChild(puaddsign);
         puheadertext = document.createElement("span");
         puheadertext.innerHTML = " <b>Pu Fields</b>";
         puheader.appendChild(puheadertext);
+        puheader.setAttribute("onclick", "create_pu_form();");
 
         puhtml.appendChild(puheader);
         pumanual = document.createElement("div");
@@ -96,7 +312,8 @@ function set_pu(){
             puactivity = document.createElement("div");
             activity = result.values[i];
             puValue = puValue + parseInt(activity[puField]);
-            console.log(activity[puField]+":"+activity[puDescField]+";"+activity[puActionField]+":"+activity[puHowField]+" - "+activity[puAutField]);
+            console.log(activity["id"]+" "+activity[puField]+":"+activity[puDescField]+";"+activity[puActionField]+":"+activity[puHowField]+" - "+activity[puAutField]);
+            activity_id = activity["id"];
             value = activity[puField];
             action = activity[puActionField];
             strsign = get_mini_pu_value(value, action);
@@ -116,13 +333,17 @@ function set_pu(){
                 activitytext = " Automated";
                 parentdiv = puautomated;
             }
+            else {
+
+                puactivity.setAttribute("onclick", "create_pu_form('"+activity_id+"');");
+            }
 
             actionclass = "";
             title = "";
             switch (action){
                 case "1": actionclass = " solve";
                     break;
-                case "2": actionclass = " avoid";
+                case "2": actionclass = " circumvent";
                     break;
                 case "3": actionclass = " acknowledge";
             }
@@ -175,7 +396,7 @@ function get_mini_pu_value(pu, puaction) {
             break;
         case "2":
             pucolor = "#bb0000";
-            putitle = "avoid";
+            putitle = "circumvent";
             break;
         case "3":
             pucolor = "#00bb00";
@@ -229,7 +450,7 @@ cj(document).ready(function($) {
   cj(".Pu_fields").hide();
      cj("#pu_activities").show();
  }, function(){
-  if(cj("#pufield .crm-inline-edit.form").length==0){
+  if(cj("#pu_activities .crm-inline-edit-form").length==0){
    cj(".Pu_fields").hide();
       cj("#pu_activities").hide();
   }
