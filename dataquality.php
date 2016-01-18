@@ -377,6 +377,9 @@ function _dataquality_pu_automation($contactid){
     $pu_automationtype_field = Null;
     $pu_automation_field = Null;
     $pu_value_addition_field = Null;
+    $pu_automation_action_field = Null;
+    $pu_automation_description_field = Null;
+    $pu_automation_how_field = Null;
 
     $result = civicrm_api3('CustomField', 'get', array(
         'name' => "new_pu_value",
@@ -417,6 +420,17 @@ function _dataquality_pu_automation($contactid){
         'name' =>  "Automated_Pu_Description",
     ));
     if ($result["id"]){ $pu_automation_description_field = "custom_".$result["id"]; }
+
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' =>  "Automated_Pu_Action",
+    ));
+    if ($result["id"]){ $pu_automation_action_field = "custom_".$result["id"]; }
+    $result = civicrm_api3('CustomField', 'get', array(
+        'name' =>  "Automated_Pu_How",
+    ));
+    if ($result["id"]){ $pu_automation_how_field = "custom_".$result["id"]; }
+
+
 
 
     /*
@@ -472,7 +486,7 @@ function _dataquality_pu_automation($contactid){
 
     $resultgroups = civicrm_api3('Group', 'get', array(
         'sequential' => 1,
-        'return' => "id,name,saved_search_id,".$pu_value_addition_field.",title",
+        'return' => "id,name,saved_search_id,".$pu_value_addition_field.",title,".$pu_automation_action_field.",".$pu_automation_how_field,
          $pu_value_addition_field => array('>=' => 1),
         'is_active' => 1,
         'options' => array('limit' => 100000),
@@ -516,8 +530,8 @@ function _dataquality_pu_automation($contactid){
                             //create activity
                             $pu_value = $group[$pu_value_addition_field];
                             $pu_desc = $group[$pu_automation_description_field]?$group[$pu_automation_description_field]:"";
-                            $pu_action = "";
-                            $pu_how = "";
+                            $pu_action = $group[$pu_automation_action_field]?$group[$pu_automation_action_field]:"";
+                            $pu_how = $group[$pu_automation_how_field]?$group[$pu_automation_how_field]:"";
                             $subject = $pu_desc;
                             $params = array("activity_type_id" => "puChanges",
                                 "status_id" => 1,

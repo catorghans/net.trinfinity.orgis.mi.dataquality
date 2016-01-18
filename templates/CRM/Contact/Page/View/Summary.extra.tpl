@@ -139,12 +139,13 @@
         putdfield = document.createElement("td");
 
         puhtmlvalue = "<select id='puform_value' >";
+        s = { 1: "small", 2: "medium", 3: "large" }
         for (i = 1; i <= 3; i++){
             selected = "";
             if (parseInt(puvalue) == i){
                 selected = " selected";
             }
-            puhtmlvalue += "<option value='"+i+"' "+selected+">"+i+"</option>";
+            puhtmlvalue += "<option value='"+i+"' "+selected+">"+s[i]+"</option>";
         }
         puhtmlvalue += "</select>";
 
@@ -217,6 +218,23 @@
 
         putable.appendChild(putr);
 
+        putr = document.createElement("tr");
+        putdlabel = document.createElement("td");
+        putdlabel.innerHTML = "<label>Solved</label>";
+
+        putdfield = document.createElement("td");
+
+        el = document.createElement("input");
+        el.type = "checkbox";
+        el.value = "1";
+        el.setAttribute("id", "puform_status");
+
+        putdfield.appendChild(el);
+
+        putr.appendChild(putdlabel);
+        putr.appendChild(putdfield);
+
+        putable.appendChild(putr);
 
         puform.appendChild(putable);
         puactivities = document.getElementById("pu_activities");
@@ -239,17 +257,23 @@
      pudescription = document.getElementById("puform_description").value;
      puaction = document.getElementById("puform_action").value;
      puhow = document.getElementById("puform_how").value;
+     pusolved = document.getElementById("puform_status").checked;
+     pustatus = "Scheduled";
+     if (pusolved) {
+         pustatus = "Completed";
+     }
+
      params = {
          "activity_type_id":"puChanges",
          "target_contact_id" : contact_id,
-         "status_id":"Scheduled",
+         "status_id": pustatus,
          "subject": pudescription,
      }
      params[puField] = puvalue;
      params[puDescField] = pudescription;
      params[puHowField] = puhow;
      params[puActionField] = puaction;
-     if (id) {
+     if (parseInt(id) > 0) {
          params["id"] = id;
      }
      console.log(params);
@@ -284,6 +308,12 @@ function set_pu(){
         "return": "subject,"+puField+","+puDescField+","+puAutField+","+puActionField+","+puActionField
     }).done(function(result) {
         puValue = 0;
+        puAction = 0;
+        puActionA = { };
+        puActionA[1] = 0;
+        puActionA[2] = 0;
+        puActionA[3] = 0;
+
         if (document.contains(document.getElementById("pu_activities"))) {
             document.getElementById("pu_activities").remove();
         }
@@ -311,11 +341,20 @@ function set_pu(){
         {
             puactivity = document.createElement("div");
             activity = result.values[i];
-            puValue = puValue + parseInt(activity[puField]);
-            console.log(activity["id"]+" "+activity[puField]+":"+activity[puDescField]+";"+activity[puActionField]+":"+activity[puHowField]+" - "+activity[puAutField]);
             activity_id = activity["id"];
             value = activity[puField];
             action = activity[puActionField];
+            actionvalue = value;
+            if (actionvalue > 3) {
+                actionvalue = 3;
+            }
+            puValue = puValue + parseInt(value);
+            if (parseInt(action) > 0) {
+                puActionA[action] += parseInt(actionvalue);
+            }
+            console.log(activity["id"]+" "+activity[puField]+":"+activity[puDescField]+";"+activity[puActionField]+":"+activity[puHowField]+" - "+activity[puAutField]);
+
+
             strsign = get_mini_pu_value(value, action);
 
             innerHTML = strsign+" "+activity[puDescField];
@@ -368,7 +407,17 @@ function set_pu(){
         puhtml.style.display = "none";
         pufield = document.getElementById("pufield");
         pufield.appendChild(puhtml);
-        set_pu_value(puValue);
+
+        puActionMax = 0;
+        puActionMaxValue = 0;
+        for (i = 1; i <= 3; i++){
+            if (puActionA[i] > puActionMaxValue){
+                puActionMax = i;
+                puActionMaxValue = puActionA[i];
+            }
+        }
+
+        set_pu_value(puValue, puActionMax);
 
     });
 
@@ -407,26 +456,23 @@ function get_mini_pu_value(pu, puaction) {
 
 }
 
-function set_pu_value(pu){
-  CRM.api('Contact', 'get', {'sequential': 1, 'id': {/literal}{$contactId}{literal}, 'return': '{/literal}{$pu_field_value},{$pu_field_action}{literal}'},
-     { success: function(data) {   
-      //  pu=data.values[0]["{/literal}{$pu_field_value}{literal}"];
-        puaction=data.values[0]["{/literal}{$pu_field_action}{literal}"];
-        if (!pu) {
-	  pusize = "27";
+   function set_pu_value(pu, puaction){
+
+      if (!pu) {
+	      pusize = "27";
           putext = "&#8857";
           pudeco = "none";
           pucolor="#bbbb00";
         }
-        else if (pu == 1) {
+ /*       else if (pu == 1) {
           pusize = "100";
           putext = "*";
           pudeco = "";
           pucolor = "#666666";
-        }
+        }*/
         else {
           if (pu > 10) pu = 10;
-          pusize = 7+(pu*10);
+          pusize = 17+(pu*10);
           putext = "&#8857;";
           pudeco = "none";
           pucolor="#666666";
@@ -435,11 +481,9 @@ function set_pu_value(pu){
           else if (puaction == 3) pucolor = "#00bb00";
         }
         cj("#pusign").css("font-size",pusize+"px").css("text-decoration", pudeco).css("color", pucolor).html(putext);
-      }
-     }
-   );
+   }
 
-}
+
 cj(document).ready(function($) {
  cj("#pufield").append(cj(".Pu_fields"));
  cj(".Pu_fields").css("width", "50%").css("float","right").css("top","-30px").css("position", "relative").hide();
