@@ -28,7 +28,19 @@ function dataquality_civicrm_xmlMenu(&$files) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
 function dataquality_civicrm_install() {
-  _dataquality_civix_civicrm_install();
+
+    $params = array(
+        'sequential' => 1,
+        'name'          => 'Pu Automation',
+        'description'   => 'Recalc Automated Pu Values',
+        'run_frequency' => 'Daily',
+        'api_entity'    => 'PuContact',
+        'api_action'    => 'synccontacts',
+        'is_active'     => 0,
+    );
+    $result = civicrm_api3('job', 'create', $params);
+
+    _dataquality_civix_civicrm_install();
 }
 
 /**
@@ -46,6 +58,17 @@ function dataquality_civicrm_uninstall() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
 function dataquality_civicrm_enable() {
+    $params = array(
+        'sequential' => 1,
+        'name'          => 'Pu Automation',
+        'description'   => 'Recalc Automated Pu Values',
+        'run_frequency' => 'Daily',
+        'api_entity'    => 'PuContact',
+        'api_action'    => 'synccontacts',
+        'is_active'     => 0,
+    );
+    $result = civicrm_api3('job', 'create', $params);
+
   _dataquality_civix_civicrm_enable();
 }
 
