@@ -13,12 +13,16 @@ function civicrm_api3_pu_contact_synccontacts ($params) {
     $sql = "select id from civicrm_contact where is_deleted = 0";
 
     try{
+        $dpu = new CRM_Dataquality_PuAutomation();
         $errorScope = CRM_Core_TemporaryErrorScope::useException();
         $dao = CRM_Core_DAO::executeQuery($sql,$parameters);
         $values = array();
         while ($dao->fetch()) {
             $values = $dao->toArray();
-            _dataquality_pu_automation($values["id"]);
+
+            $dpu->setAutomationContact($values["id"]);
+
+         //   _dataquality_pu_automation($values["id"]);
         }
     }
     catch(Exception $e){

@@ -366,7 +366,10 @@ function dataquality_civicrm_permission(&$permissions) {
 function dataquality_civicrm_post($op, $objectName, $objectId, &$objectRef ){
   if ($objectName == "Individual" || $objectName == "Household" || $objectName == "Organization"){
       if ($op == "create" || $op == "edit" || $op == "restore"){
-          _dataquality_pu_automation($objectId);
+          $dpu = new CRM_Dataquality_PuAutomation();
+
+          $dpu->setAutomationContact($objectId);
+   //       _dataquality_pu_automation($objectId);
       }
   }
 
