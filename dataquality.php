@@ -543,18 +543,19 @@ function _dataquality_pu_automation($contactid){
                     if ($currentusergroupmember == true) {
                         //if no activity exists, create it
                         $activity_found = false;
-                        foreach ($pu_activities as $pu_activity) {
+                        foreach ($pu_activities as $punr => $pu_activity) {
                             if ($pu_activity["automation_type_74"] == $pu_automation_type_start.$group["id"]) {
                                 $activity_found = true;
+                                $pu_activities[$punr]["found"] = true;
                                 break;
                             }
                         }
                         if (!$activity_found){
                             //create activity
                             $pu_value = $group[$pu_value_addition_field];
-                            $pu_desc = $group[$pu_automation_description_field]?$group[$pu_automation_description_field]:"";
-                            $pu_action = $group[$pu_automation_action_field]?$group[$pu_automation_action_field]:"";
-                            $pu_how = $group[$pu_automation_how_field]?$group[$pu_automation_how_field]:"";
+                            $pu_desc = isset($group[$pu_automation_description_field])?$group[$pu_automation_description_field]:"";
+                            $pu_action = isset($group[$pu_automation_action_field])?$group[$pu_automation_action_field]:"";
+                            $pu_how = isset($group[$pu_automation_how_field])?$group[$pu_automation_how_field]:"";
                             $subject = $pu_desc;
                             $params = array("activity_type_id" => "puChanges",
                                 "status_id" => 1,
@@ -582,6 +583,7 @@ function _dataquality_pu_automation($contactid){
                         foreach ($pu_activities as $pu_activity) {
                             if ($pu_activity["automation_type_74"] == $pu_automation_type_start.$group["id"]) {
                                 $activity_found = true;
+                                $pu_activity["found"] = true;
                                 //close it
                                 $params = array("id" => $pu_activity["entity_id"],
                                     "status_id" => 2);
@@ -607,6 +609,23 @@ function _dataquality_pu_automation($contactid){
 
 
 
+            }
+        }
+
+        //automated pu activities from groups where there is no group anymore
+        //close activity
+        CRM_Core_Error::debug_log_message('activities array'.print_r($pu_activities,true));
+        foreach ($pu_activities as $pu_activity) {
+            if (!isset($pu_activity["found"]) || ($pu_activity["found"] == false)){
+
+                if (substr($pu_activity["automation_type_74"],0, strlen($pu_automation_type_start)) === $pu_automation_type_start) {
+
+                    //close it
+                    $params = array("id" => $pu_activity["entity_id"],
+                        "status_id" => 2);
+                    $resultactivity = civicrm_api3('Activity', 'create', $params);
+                    CRM_Core_Error::debug_log_message("pu activity closed, no group:" . print_r($pu_activity, true) . print_r($resultactivity, true));
+                }
             }
         }
 
