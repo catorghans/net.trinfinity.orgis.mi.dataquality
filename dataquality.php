@@ -41,6 +41,8 @@ function dataquality_civicrm_install() {
     $result = civicrm_api3('job', 'create', $params);
 
     _dataquality_civix_civicrm_install();
+
+    //check 2nd PuChanges activity type due to name change
 }
 
 /**
@@ -79,6 +81,8 @@ function dataquality_civicrm_enable() {
  */
 function dataquality_civicrm_disable() {
   _dataquality_civix_civicrm_disable();
+
+    //delete job
 }
 
 /**

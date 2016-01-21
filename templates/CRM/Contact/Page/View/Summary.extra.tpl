@@ -183,6 +183,7 @@
         puhtmlvalue = "<select id='puform_action' >";
 
         s = { 1: "solve", 2: "circumvent", 3: "acknowledge" }
+        puhtmlvalue += "<option value=''></option>";
 
         for (i = 1; i <= 3; i++){
             selected = "";
