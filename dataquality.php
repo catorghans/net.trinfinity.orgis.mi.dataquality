@@ -29,20 +29,30 @@ function dataquality_civicrm_xmlMenu(&$files) {
  */
 function dataquality_civicrm_install() {
 
-    $params = array(
-        'sequential' => 1,
-        'name'          => 'Pu Automation',
-        'description'   => 'Recalc Automated Pu Values',
-        'run_frequency' => 'Daily',
-        'api_entity'    => 'PuContact',
-        'api_action'    => 'synccontacts',
-        'is_active'     => 0,
-    );
-    $result = civicrm_api3('job', 'create', $params);
+
 
     _dataquality_civix_civicrm_install();
 
     //check 2nd PuChanges activity type due to name change
+    $result = civicrm_api3('Job', 'getcount', array(
+        'sequential' => 1,
+        'name' => "Pu Automation",
+    ));
+
+    if ($result["result"] == 0){
+        $params = array(
+            'sequential' => 1,
+            'name'          => 'Pu Automation',
+            'description'   => 'Recalc Automated Pu Values',
+            'run_frequency' => 'Always',
+            'api_entity'    => 'PuContact',
+            'api_action'    => 'synccontacts',
+            'is_active'     => 0,
+        );
+        $result = civicrm_api3('job', 'create', $params);
+    }
+
+
 }
 
 /**
@@ -52,6 +62,25 @@ function dataquality_civicrm_install() {
  */
 function dataquality_civicrm_uninstall() {
   _dataquality_civix_civicrm_uninstall();
+
+    try {
+        $result = civicrm_api3('Job', 'get', array(
+            'sequential' => 1,
+            'return' => "id",
+            'name' => "Pu Automation",
+        ));
+    } catch (Exception $e){
+        CRM_Core_Error::debug_log_message("MI CUSTOM error:".$e->getMessage());
+        return;
+    }
+
+    foreach ($result["values"] as $job){
+        $params = array();
+        $params["id"] = $job["id"];
+
+        $result2 = civicrm_api("Job",'delete', $params);
+    }
+
 }
 
 /**
@@ -62,6 +91,26 @@ function dataquality_civicrm_uninstall() {
 function dataquality_civicrm_enable() {
 
   _dataquality_civix_civicrm_enable();
+
+    $result = civicrm_api3('Job', 'getcount', array(
+        'sequential' => 1,
+        'name' => "Pu Automation",
+    ));
+
+    if ($result["result"] == 0){
+        $params = array(
+            'sequential' => 1,
+            'name'          => 'Pu Automation',
+            'description'   => 'Recalc Automated Pu Values',
+            'run_frequency' => 'Always',
+            'api_entity'    => 'PuContact',
+            'api_action'    => 'synccontacts',
+            'is_active'     => 0,
+        );
+        $result2 = civicrm_api3('job', 'create', $params);
+    }
+
+
 }
 
 /**
@@ -73,6 +122,24 @@ function dataquality_civicrm_disable() {
   _dataquality_civix_civicrm_disable();
 
     //delete job
+    try {
+        $result = civicrm_api3('Job', 'get', array(
+            'sequential' => 1,
+            'return' => "id",
+            'name' => "Pu Automation",
+        ));
+    } catch (Exception $e){
+        CRM_Core_Error::debug_log_message("MI CUSTOM error:".$e->getMessage());
+        return;
+    }
+
+    foreach ($result["values"] as $job){
+        $params = array();
+        $params["id"] = $job["id"];
+
+        $result2 = civicrm_api("Job",'delete', $params);
+    }
+
 }
 
 /**
