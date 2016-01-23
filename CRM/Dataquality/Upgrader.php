@@ -49,7 +49,15 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base {
     return TRUE;
   } // */
 
+  public function upgrade_1001(){
+    // check 2 puChanges Activities
 
+    // Change settings
+
+    //remove existing Report.
+
+
+  }
   /**
    * Example: Run an external SQL script.
    *

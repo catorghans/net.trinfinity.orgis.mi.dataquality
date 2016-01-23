@@ -22,7 +22,6 @@ function civicrm_api3_pu_contact_synccontacts ($params) {
 
             $dpu->setAutomationContact($values["id"]);
 
-         //   _dataquality_pu_automation($values["id"]);
         }
     }
     catch(Exception $e){

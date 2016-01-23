@@ -558,9 +558,9 @@
       <option_group_name>pu_action_20150601084519</option_group_name>
     </OptionValue>
     <OptionValue>
-      <label>1</label>
+      <label>Small</label>
       <value>1</value>
-      <name>c4ca4238a0b923820dcc509a6f75849</name>
+      <name>Small</name>
       <is_default>0</is_default>
       <weight>1</weight>
       <is_optgroup>0</is_optgroup>
@@ -569,9 +569,9 @@
       <option_group_name>pu_value_addition_20151228190036</option_group_name>
     </OptionValue>
     <OptionValue>
-      <label>2</label>
+      <label>Medium</label>
       <value>2</value>
-      <name>c81e728d9d4c2f636f067f89cc14862</name>
+      <name>Medium</name>
       <is_default>0</is_default>
       <weight>2</weight>
       <is_optgroup>0</is_optgroup>
@@ -580,9 +580,9 @@
       <option_group_name>pu_value_addition_20151228190036</option_group_name>
     </OptionValue>
     <OptionValue>
-      <label>3</label>
+      <label>Large</label>
       <value>3</value>
-      <name>eccbc87e4b5ce2fe28308fd9f2a7baf</name>
+      <name>Large</name>
       <is_default>0</is_default>
       <weight>3</weight>
       <is_optgroup>0</is_optgroup>
