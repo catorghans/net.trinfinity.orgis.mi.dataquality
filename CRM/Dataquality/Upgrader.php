@@ -52,7 +52,18 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base {
   public function upgrade_1001(){
     // check 2 puChanges Activities
 
+
+
+    //move pu contact fields to activity fields
+
+
     // Change settings
+      //old pu  activity fields to inactive
+      //change pu  activity field display names
+      //pu contact fields to inactive
+      //make sure pu Activity display name ok
+
+
 
     //remove existing Report.
 

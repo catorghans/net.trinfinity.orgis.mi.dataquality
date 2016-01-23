@@ -78,6 +78,8 @@ class CRM_Dataquality_PuAutomation
         if ($result["id"]){ $this->pu_automation_how_field = "custom_".$result["id"]; }
     }
 
+
+
     public function setAutomationGroups($enforce = false){
         //Get pu Groups
 
