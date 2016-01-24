@@ -68,22 +68,93 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             ));
             if ($result["id"]) {
                 $pu_value_field = "custom_" . $result["id"];
+
+                //set label
+
+
+                //set right option group
+                $result2 = civicrm_api3('OptionGroup', 'getsingle', array(
+                    'sequential' => 1,
+                    'name' => "pu_value_addition_20151228190036",
+                ));
+                $optiongroupid = $result["id"];
+                foreach ($result["values"] as $id => $value) { // 1 expected
+                    //if optiongroupid or label is false, update it
+                    if ($value["label"] != "Pu value" || $value["custom_group_id"] != $optiongroupid) {
+                        $result2 = civicrm_api3('CustomField', 'create', array(
+                            'id' => $result["id"],
+                            'label' => "Pu value",
+                            'custom_group_id' => $optiongroupid,
+                        ));
+                    }
+                }
             }
+        } catch (Exception $e) {
+            // if it fails then for some reason this old table likely does not exist, not harm done.
+        }
+        try {
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "new_pu_description",
             ));
             if ($result["id"]) {
                 $pu_description_field = "custom_" . $result["id"];
+
+                foreach ($result["values"] as $id => $value) { // 1 expected
+                    //if optiongroupid or label is false, update it
+                    if ($value["label"] != "Pu Description" ) {
+                        $result2 = civicrm_api3('CustomField', 'create', array(
+                            'id' => $result["id"],
+                            'label' => "Pu Description",
+                        ));
+                    }
+                }
+
             }
+        } catch (Exception $e) {
+            // if it fails then for some reason this old table likely does not exist, not harm done.
+        }
+        try {
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "new_pu_action",
+
             ));
-            if ($result["id"]){ $pu_action_field = "custom_".$result["id"]; }
+            if ($result["id"]){
+                $pu_action_field = "custom_".$result["id"];
+
+                foreach ($result["values"] as $id => $value) { // 1 expected
+                    //if optiongroupid or label is false, update it
+                    if ($value["label"] != "Pu Action" ) {
+                        $result2 = civicrm_api3('CustomField', 'create', array(
+                            'id' => $result["id"],
+                            'label' => "Pu Action",
+                        ));
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            // if it fails then for some reason this old table likely does not exist, not harm done.
+        }
+        try {
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "new_pu_how",
             ));
-            if ($result["id"]){ $pu_how_field = "custom_".$result["id"]; }
+            if ($result["id"]){
+                $pu_how_field = "custom_".$result["id"];
 
+                foreach ($result["values"] as $id => $value) { // 1 expected
+                    //if optiongroupid or label is false, update it
+                    if ($value["label"] != "Pu How" ) {
+                        $result2 = civicrm_api3('CustomField', 'create', array(
+                            'id' => $result["id"],
+                            'label' => "Pu How",
+                        ));
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            // if it fails then for some reason this old table likely does not exist, not harm done.
+        }
+        try {
             $parameters = array();
             $sql = "select p.pu_overview_1 as value, p.pu_contact_2 as description, p.pu_action_3 as action, p.pu_how_4 as how, c.id
          from civicrm_contact c left join civicrm_value_pu_fields_1 p ON c.id = p.entity_id
@@ -133,45 +204,57 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "old_pu_value",
             ));
-            if ($result["is_error"]=="0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active']=="1"){
+            if ($result["is_error"]=="0" && $result["id"]){
+               $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
 
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "old_pu_description",
             ));
-            if ($result["is_error"]=="0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active']=="1"){
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
 
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "old_pu_action",
             ));
-            if ($result["is_error"]=="0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active']=="1"){
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
 
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "old_pu_how",
             ));
-            if ($result["is_error"]=="0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active']=="1"){
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
 
         }catch(Exception $e){
@@ -180,59 +263,86 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
         }
 
         //change pu  activity field display names
+
         //pu contact fields to inactive
         try {
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "Pu_Overview",
             ));
-            if ($result["is_error"] == "0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active'] == "1") {
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "Pu_Contact",
             ));
-            if ($result["is_error"] == "0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active'] == "1") {
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "Pu_Action",
             ));
-            if ($result["is_error"] == "0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active'] == "1") {
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
             $result = civicrm_api3('CustomField', 'get', array(
                 'name' => "Pu_How",
             ));
-            if ($result["is_error"] == "0" && $result["id"] && isset($result["values"][0]['is_active']) && $result["values"][0]['is_active'] == "1") {
 
-                $result2 = civicrm_api3('CustomField', 'create', array(
-                    'id' => $result["id"],
-                    'is_active' => "0",
-                ));
+            if ($result["is_error"]=="0" && $result["id"]){
+                $values = array_values($result["values"]);
+                if (isset($values[0]['is_active']) && $values[0]['is_active']=="1") {
+
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $result["id"],
+                        'is_active' => "0",
+                    ));
+                }
             }
+
         } catch (Exception $e){
 
         }
 
 
         //make sure pu Activity display name ok
+        $result = civicrm_api3('OptionValue', 'get', array(
+            'sequential' => 1,
+            'name' => "puChanges",
+        ));
+        if ($result["is_error"] == "0" && $result["id"]){
+            foreach ($result["values"] as $id => $value){
+                $optionid = $value["id"];
 
+                if ($value["label"] != "Pu"){
+                    $result2 = civicrm_api3('CustomField', 'create', array(
+                        'id' => $optionid,
+                        'label' => "Pu",
+                    ));
+                }
+            }
 
-        //make sure pu fields display ok and right set of options
-
-
+        }
 
         //remove existing Report.
         return true;
