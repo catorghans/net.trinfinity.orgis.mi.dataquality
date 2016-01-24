@@ -335,7 +335,7 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
                 $optionid = $value["id"];
 
                 if ($value["label"] != "Pu"){
-                    $result2 = civicrm_api3('CustomField', 'create', array(
+                    $result2 = civicrm_api3('OptionValue', 'create', array(
                         'id' => $optionid,
                         'label' => "Pu",
                     ));
