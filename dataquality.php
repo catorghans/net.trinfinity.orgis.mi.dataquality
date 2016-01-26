@@ -436,12 +436,12 @@ function dataquality_civicrm_post($op, $objectName, $objectId, &$objectRef ){
 
   if ($objectName == "GroupContact"){
     if ($op == "create"){
-     CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
+ //    CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
        // CRM_Core_Error::debug_log_message("MI group".print_r(CRM_Contact_BAO_SavedSearch::contactIDsSQL(2),true));
        // CRM_Contact_BAO_GroupContactCache::contactGroup()
     }
     elseif ($op == "delete") {
-     CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
+  //   CRM_Core_Error::debug_log_message("MI group:".$op." ".$objectId);
     }
 
   }
@@ -451,32 +451,3 @@ function dataquality_civicrm_post($op, $objectName, $objectId, &$objectRef ){
 /**
  * @param $dao
  */
-function dataquality_civicrm_postSave_civicrm_group_contact_cache ($dao) {
-     CRM_Core_Error::debug_log_message("MI group contact cache:".print_r($dao,true));
-
-}
-
-/**
- * @param $dao
- */
-function dataquality_civicrm_postSave_civicrm_group_contact ($dao) {
-     CRM_Core_Error::debug_log_message("MI group contact:".print_r($dao,true));
-
-
-
-}
-
-function dataquality_civicrm_alterContent( &$content, $context, $tplName, &$object )
-{
-    if ($context == "page") {
-        if ($tplName == "CRM/Group/Page/Group.tpl") {
-            $extra = "
-            <script language=\"
-
-
-
-
-            ";
-        }
-    }
-}
