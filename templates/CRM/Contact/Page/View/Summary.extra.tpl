@@ -234,7 +234,7 @@
 
         putr = document.createElement("tr");
         putdlabel = document.createElement("td");
-        putdlabel.innerHTML = "<label>Solved</label>";
+        putdlabel.innerHTML = "<label>Closed</label>";
 
         putdfield = document.createElement("td");
 
