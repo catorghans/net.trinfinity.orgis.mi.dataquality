@@ -99,7 +99,7 @@
                     pudescription = activity[puDescField];
                     puhow = activity[puHowField];
                     puaction = activity[puActionField];
-                    create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow, true);
+                    create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow, readonly);
                 }
             });
         }
