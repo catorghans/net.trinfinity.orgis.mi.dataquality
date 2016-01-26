@@ -375,6 +375,26 @@
       <option_group_name>pu_action_20150601084519</option_group_name>
       <custom_group_name>Pu_Automation</custom_group_name>
     </CustomField>
+    <CustomField>
+      <name>Pu_Manual_Close</name>
+      <label>Manual Close</label>
+      <data_type>Boolean</data_type>
+      <html_type>Radio</html_type>
+      <default_value>0</default_value>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>10</weight>
+      <help_pre>Do you want CiviCRM users to be able to close the Pu issue created by this group?</help_pre>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_manual_close</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Pu_Automation</custom_group_name>
+    </CustomField>
   </CustomFields>
   <OptionGroups>
     <OptionGroup>

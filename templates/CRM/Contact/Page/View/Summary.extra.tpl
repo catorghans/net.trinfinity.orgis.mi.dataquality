@@ -5,11 +5,14 @@
 {assign var=pu_activity_desc_field_value value="custom_`$pu_activity_desc_field.id`"}
 {crmAPI var='pu_activity_aut_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Automation'}
 {assign var=pu_activity_aut_field_value value="custom_`$pu_activity_aut_field.id`"}
+{crmAPI var='pu_activity_aut_type_field' entity='CustomField' action='getsingle' sequential=1 name='Automation_Type'}
+{assign var=pu_activity_aut_type_field_value value="custom_`$pu_activity_aut_type_field.id`"}
 {crmAPI var='pu_activity_how_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_how'}
 {assign var=pu_activity_how_field_value value="custom_`$pu_activity_how_field.id`"}
 {crmAPI var='pu_activity_action_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_action'}
 {assign var=pu_activity_action_field_value value="custom_`$pu_activity_action_field.id`"}
-
+{crmAPI var='pu_manual_close_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Manual_Close'}
+{assign var=pu_manual_close_field_value value="custom_`$pu_manual_close_field.id`"}
 
 {crmAPI var='pu_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_field.id`"}
 {assign var=pu_field_value value="custom_`$pu_field.id`"}
@@ -36,11 +39,11 @@
   .pu_activity.automated {
       background-color: #F6F6F2;
   }
-  .pu_activity.manual{
+  .pu_activity.edit{
       cursor: pointer;
 
   }
-  .pu_activity.manual:hover {
+  .pu_activity.edit:hover {
       border: 2px dashed #D3D3D3;
   }
   #pu_activities {
@@ -63,7 +66,7 @@
 
 <script>
 
-    function create_pu_form(activity_id){
+    function create_pu_form(activity_id, readonly = false){
         contact_id = "{/literal}{$contactId}{literal}";
 
         puvalue = "";
@@ -96,21 +99,25 @@
                     pudescription = activity[puDescField];
                     puhow = activity[puHowField];
                     puaction = activity[puActionField];
-                    create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow);
+                    create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow, true);
                 }
             });
         }
-        else {
-            create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow);
+        else { //add
+            create_pu_html_form(activity_id, puvalue, pudescription, puaction, puhow, false);
         }
 
         //create form
 
     }
-    function create_pu_html_form(id, puvalue, pudescription, puaction, puhow){
+    function create_pu_html_form(id, puvalue, pudescription, puaction, puhow, readonly){
         console.log ( "activity "+id+" "+puvalue+" "+pudescription+" "+puhow+" "+puaction);
 
 
+        disabled = "";
+        if (readonly){
+            disabled = "disabled = 'disabled'";
+        }
         puform = document.createElement("form");
         puform.setAttribute("id", "puform");
 
@@ -138,7 +145,7 @@
 
         putdfield = document.createElement("td");
 
-        puhtmlvalue = "<select id='puform_value' >";
+        puhtmlvalue = "<select id='puform_value' "+disabled+">";
         s = { 1: "small", 2: "medium", 3: "large" }
         for (i = 1; i <= 3; i++){
             selected = "";
@@ -164,6 +171,9 @@
 
         el = document.createElement("textarea");
         el.setAttribute("id", "puform_description");
+        if (readonly){
+            el.setAttribute("disabled", "disabled");
+        }
         el.innerHTML = pudescription;
 
         putdfield.appendChild(el);
@@ -180,7 +190,7 @@
 
         putdfield = document.createElement("td");
 
-        puhtmlvalue = "<select id='puform_action' >";
+        puhtmlvalue = "<select id='puform_action' "+disabled+">";
 
         s = { 1: "solve", 2: "circumvent", 3: "acknowledge" }
         puhtmlvalue += "<option value=''></option>";
@@ -210,6 +220,9 @@
 
         el = document.createElement("textarea");
         el.setAttribute("id", "puform_how");
+        if (readonly){
+            el.setAttribute("disabled", "disabled");
+        }
         el.innerHTML = puhow;
 
         putdfield.appendChild(el);
@@ -301,12 +314,15 @@ function set_pu(){
     puHowField = "{/literal}{$pu_activity_how_field_value}{literal}";
     puActionField = "{/literal}{$pu_activity_action_field_value}{literal}";
     contact_id = "{/literal}{$contactId}{literal}";
+    puAutTypeField = "{/literal}{$pu_activity_aut_type_field_value}{literal}";
+    puManualSolvField = "{/literal}{$pu_manual_close_field_value}{literal}";
+
     CRM.api3('Activity', 'get', {
         "sequential": 1,
         "target_contact_id": {/literal}{$contactId}{literal},
         "status_id":"Scheduled",
         "activity_type_id":"puChanges",
-        "return": "subject,"+puField+","+puDescField+","+puAutField+","+puActionField+","+puActionField
+        "return": "subject,"+puField+","+puDescField+","+puAutField+","+puActionField+","+puActionField+","+puAutTypeField
     }).done(function(result) {
         puValue = 0;
         puAction = 0;
@@ -364,14 +380,40 @@ function set_pu(){
             }
 
             puactivity.innerHTML = innerHTML;
-            puclass = "pu_activity manual";
-            activitytext = " Click to Edit";
+            puclass = "pu_activity manual edit";
+            activitytext = " Manual - Click to Edit";
             parentdiv = pumanual;
+            autgroup = "";
 
-            if (activity[puAutField] == 1){
+            if (activity[puAutField] == 1) {
                 puclass = "pu_activity automated";
                 activitytext = " Automated";
                 parentdiv = puautomated;
+                //if from smart group, then get group and get manualsolve field value
+                puauttype = activity[puAutTypeField];
+                if (puauttype &&  puauttype.substring(0,1) == "G") {
+                    autgroup = puauttype.substring(1);
+                    CRM.api3('Group', 'get', {
+                        "sequential": 1,
+                        "id": autgroup,
+                        "return": puManualSolvField,
+                    }).done(function (result2) {
+                        for (i = 0; i < result2.values.length; i++) {
+                            if (result2.values[i][puManualSolvField] == "1") {
+                                puclass = puactivity.getAttribute("class");
+                                putitle = puactivity.getAttribute("title");
+
+                                puclass += " edit";
+                                putitle += " - Click to Close";
+
+                                puclass = puactivity.setAttribute("class", puclass);
+                                puclass = puactivity.setAttribute("title", putitle);
+                                puactivity.setAttribute("onclick", "create_pu_form('" + activity_id + "',true);");
+                            }
+                        }
+
+                    });
+                }
             }
             else {
 

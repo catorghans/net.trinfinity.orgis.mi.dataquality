@@ -116,12 +116,12 @@ class CRM_Dataquality_PuAutomation
         $pu_activities = Null;
         $parameters = array();
 
-        $sql = "select h.*
+        $sql = "select h.*,a.status_id
             from civicrm_value_pu_history_fields h inner join civicrm_activity a ON h.entity_id = a.id
               left join civicrm_activity_contact c on a.id=c.activity_id
             where c.contact_id = ".$contactid."
             and c.record_type_id = 3
-            and a.status_id = 1
+            and a.status_id in (1,2)
             order by id desc;";
 
         try{
@@ -183,25 +183,27 @@ class CRM_Dataquality_PuAutomation
                         $this->pu_automation_field => 1,
                     );
                     $resultactivity = civicrm_api3('Activity', 'create', $params);
-                    CRM_Core_Error::debug_log_message("pu activity created:".print_r($resultactivity,true));
+                //    CRM_Core_Error::debug_log_message("pu activity created:".print_r($resultactivity,true));
 
 
                 }
             }
             //if user is not group member
             else {
-                //if activity exists, delete it
+                //if open activity exists, close it
                 $activity_found = false;
                 foreach ($pu_activities as $pu_activity) {
                     if ($pu_activity["automation_type_74"] == $this->pu_automation_type_start.$group["id"]) {
                         $activity_found = true;
                         $pu_activity["found"] = true;
                         //close it
-                        $params = array("id" => $pu_activity["entity_id"],
-                            "status_id" => 2);
-                        $resultactivity = civicrm_api3('Activity', 'create', $params);
-                        CRM_Core_Error::debug_log_message("pu activity updated:".print_r($resultactivity,true));
-                        break;
+                        if ($pu_activity["status_id"] == "1") {
+                            $params = array("id" => $pu_activity["entity_id"],
+                                "status_id" => 2);
+                            $resultactivity = civicrm_api3('Activity', 'create', $params);
+                            //          CRM_Core_Error::debug_log_message("pu activity updated:".print_r($resultactivity,true));
+                            break;
+                        }
                     }
                 }
             }
@@ -220,7 +222,7 @@ class CRM_Dataquality_PuAutomation
                     $params = array("id" => $pu_activity["entity_id"],
                         "status_id" => 2);
                     $resultactivity = civicrm_api3('Activity', 'create', $params);
-                    CRM_Core_Error::debug_log_message("pu activity closed, no group:" . print_r($pu_activity, true) . print_r($resultactivity, true));
+          //          CRM_Core_Error::debug_log_message("pu activity closed, no group:" . print_r($pu_activity, true) . print_r($resultactivity, true));
                 }
             }
         }

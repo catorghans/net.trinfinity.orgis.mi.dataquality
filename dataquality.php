@@ -465,3 +465,18 @@ function dataquality_civicrm_postSave_civicrm_group_contact ($dao) {
 
 
 }
+
+function dataquality_civicrm_alterContent( &$content, $context, $tplName, &$object )
+{
+    if ($context == "page") {
+        if ($tplName == "CRM/Group/Page/Group.tpl") {
+            $extra = "
+            <script language=\"
+
+
+
+
+            ";
+        }
+    }
+}
