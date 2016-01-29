@@ -385,41 +385,6 @@ function set_pu(){
             parentdiv = pumanual;
             autgroup = "";
 
-            if (activity[puAutField] == 1) {
-                puclass = "pu_activity automated";
-                activitytext = " Automated";
-                parentdiv = puautomated;
-                //if from smart group, then get group and get manualsolve field value
-                puauttype = activity[puAutTypeField];
-                if (puauttype &&  puauttype.substring(0,1) == "G") {
-                    autgroup = puauttype.substring(1);
-                    CRM.api3('Group', 'get', {
-                        "sequential": 1,
-                        "id": autgroup,
-                        "return": puManualSolvField,
-                    }).done(function (result2) {
-                        for (i = 0; i < result2.values.length; i++) {
-                            if (result2.values[i][puManualSolvField] == "1") {
-                                puclass = puactivity.getAttribute("class");
-                                putitle = puactivity.getAttribute("title");
-
-                                puclass += " edit";
-                                putitle += " - Click to Close";
-
-                                puclass = puactivity.setAttribute("class", puclass);
-                                puclass = puactivity.setAttribute("title", putitle);
-                                puactivity.setAttribute("onclick", "create_pu_form('" + activity_id + "',true);");
-                            }
-                        }
-
-                    });
-                }
-            }
-            else {
-
-                puactivity.setAttribute("onclick", "create_pu_form('"+activity_id+"');");
-            }
-
             actionclass = "";
             title = "";
             switch (action){
@@ -438,13 +403,69 @@ function set_pu(){
                     break;
 
             }
-            title = putext + " - "+activitytext;
 
-            puactivity.setAttribute("class", puclass+actionclass);
+
+
+            autgroup = null;
+
+
+            if (activity[puAutField] == 1) {
+                puclass = "pu_activity automated";
+                activitytext = " Automated";
+                parentdiv = puautomated;
+                //if from smart group, then get group and get manualsolve field value
+                puauttype = activity[puAutTypeField];
+                if (puauttype &&  puauttype.substring(0,1) == "G") {
+                    autgroup = puauttype.substring(1);
+          //          puclass = puactivity.getAttribute("class");
+                    puclass += " pu_group_"+autgroup;
+           //         puactivity.setAttribute("class", puclass);
+
+                 }
+            }
+            else {
+
+                puactivity.setAttribute("onclick", "create_pu_form('"+activity_id+"');");
+            }
+
+            title = putext + " - "+activitytext;
             puactivity.setAttribute("title", title);
+            puactivity.setAttribute("id", "pu_activity_"+activity_id);
+            puactivity.setAttribute("class", puclass+actionclass);
+
             parentdiv.appendChild(puactivity);
             //  console.log(result.values[i]);
+            if (autgroup) {
+                CRM.api3('Group', 'get', {
+                    "sequential": 1,
+                    "id": autgroup,
+                    "return": puManualSolvField
+                }).done(function (result2) {
+                    for (i = 0; i < result2.values.length; i++) {
+                        if (result2.values[i][puManualSolvField] == "1") {
+                            var activity = document.getElementsByClassName("pu_group_"+result2.values[i]["id"]);
+
+                            puclass = activity[0].getAttribute("class");
+                            putitle = activity[0].getAttribute("title");
+                            puidtext = activity[0].getAttribute("id");
+                            puid = puidtext.substring(12);
+
+                            puclass += " edit";
+                            putitle += " - Click to Close";
+
+                            puclass = activity[0].setAttribute("class", puclass);
+                            puclass = activity[0].setAttribute("title", putitle);
+                            activity[0].setAttribute("onclick", "create_pu_form('" + puid + "',true);");
+                        }
+                    }
+
+                });
+            }
+
         }
+
+
+
         puhtml.appendChild(pumanual);
         puhtml.appendChild(puautomated);
         puhtml.style.display = "none";
@@ -459,6 +480,9 @@ function set_pu(){
                 puActionMaxValue = puActionA[i];
             }
         }
+
+
+
 
         set_pu_value(puValue, puActionMax);
 
