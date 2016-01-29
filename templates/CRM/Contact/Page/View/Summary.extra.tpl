@@ -66,7 +66,7 @@
 
 <script>
 
-    function create_pu_form(activity_id, readonly = false){
+    function create_pu_form(activity_id, readonly){
         contact_id = "{/literal}{$contactId}{literal}";
 
         puvalue = "";
@@ -348,7 +348,7 @@ function set_pu(){
         puheadertext = document.createElement("span");
         puheadertext.innerHTML = " <b>Pu Fields</b>";
         puheader.appendChild(puheadertext);
-        puheader.setAttribute("onclick", "create_pu_form();");
+        puheader.setAttribute("onclick", "create_pu_form(null, false);");
 
         puhtml.appendChild(puheader);
         pumanual = document.createElement("div");
@@ -425,7 +425,7 @@ function set_pu(){
             }
             else {
 
-                puactivity.setAttribute("onclick", "create_pu_form('"+activity_id+"');");
+                puactivity.setAttribute("onclick", "create_pu_form('"+activity_id+"', false);");
             }
 
             title = putext + " - "+activitytext;
