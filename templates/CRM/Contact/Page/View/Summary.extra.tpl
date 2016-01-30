@@ -333,6 +333,8 @@ function set_pu(){
 
 
         if (document.getElementById("pu_activities")){
+            child = document.getElementById("pu_activities");
+            child.parentNode.removeChild(child);
             document.getElementById("pu_activities").remove();
         }
         puhtml = document.createElement("div");
