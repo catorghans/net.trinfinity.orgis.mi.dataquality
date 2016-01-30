@@ -331,7 +331,8 @@ function set_pu(){
         puActionA[2] = 0;
         puActionA[3] = 0;
 
-        if (document.contains(document.getElementById("pu_activities"))) {
+
+        if (document.getElementById("pu_activities")){
             document.getElementById("pu_activities").remove();
         }
         puhtml = document.createElement("div");
