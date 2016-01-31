@@ -350,6 +350,7 @@ class CRM_Dataquality_Form_Report_PuActivity extends CRM_Report_Form {
     $this->_tagFilterTable = 'civicrm_activity';
     parent::__construct();
 
+    CRM_Core_Error::debug_log_message(print_r($this->_columns,true));
 
     $this->getPuFields();
 
@@ -366,11 +367,16 @@ class CRM_Dataquality_Form_Report_PuActivity extends CRM_Report_Form {
     if (isset($this->_puFieldSet) && isset($this->_PuFieldHow)) {
 
       $this->_columns[$this->_puFieldSet]["fields"][$this->_PuFieldHow]["default"] = 1;
-
     }
     if (isset($this->_puFieldSet) && isset($this->_puFieldAction)) {
 
       $this->_columns[$this->_puFieldSet]["fields"][$this->_puFieldAction]["default"] = 1;
+      $this->_columns[$this->_puFieldSet]["order_bys"][$this->_puFieldAction]=array(
+          'title' => 'Pu action',
+          'dbAlias' => $this->_puFieldSet."_".$this->_puFieldAction,
+          'default_weight' => '1',
+          'section' => "1"
+      );
 
     }
     if (isset($this->_puFieldSet) && isset($this->_PuFieldAutomation)) {
@@ -389,7 +395,7 @@ class CRM_Dataquality_Form_Report_PuActivity extends CRM_Report_Form {
 
     }
     $this->_columns['civicrm_address']['fields']['country_id']['default']=0;
-    CRM_Core_Error::debug_log_message(print_r($this->_columns['civicrm_address']['fields']['country_id'],true));
+
 
   }
 
@@ -399,7 +405,7 @@ class CRM_Dataquality_Form_Report_PuActivity extends CRM_Report_Form {
   {
 
     foreach ($this->_columns as $colname => $col){
-      if (isset($col["group_title"]) && $col["group_title"] == "PuFields"){
+      if (isset($col["group_title"]) && $col["group_title"] == "Pufields"){
 
         $this->_puFieldSet = $colname;
         if ($col["fields"]) foreach ($col["fields"] as $fieldname => $field) {
