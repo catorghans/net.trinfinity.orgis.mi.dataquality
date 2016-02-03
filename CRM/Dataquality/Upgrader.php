@@ -52,6 +52,210 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
 
     public function upgrade_1001()
     {
+        //add new fields
+
+        //Group fields
+
+        /*   <CustomGroup>
+      <name>Pu_Automation</name>
+      <title>Pu Automation</title>
+      <extends>Group</extends>
+      <style>Inline</style>
+      <collapse_display>0</collapse_display>
+      <help_pre></help_pre>
+      <help_post></help_post>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <table_name>civicrm_value_pu_automation_18</table_name>
+      <is_multiple>0</is_multiple>
+      <collapse_adv_display>0</collapse_adv_display>
+      <created_date>2015-12-28 18:56:49</created_date>
+      <is_reserved>0</is_reserved>
+    </CustomGroup>*/
+
+        /*    <CustomField>
+      <name>Pu_Automation</name>
+      <label>Pu Automation</label>
+      <data_type>Boolean</data_type>
+      <html_type>Radio</html_type>
+      <default_value>0</default_value>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_automation_73</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Automation_Type</name>
+      <label>Automation Type</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>3</weight>
+      <help_pre>Origin of pu-automation element</help_pre>
+      <is_active>1</is_active>
+      <is_view>1</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>automation_type_74</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>puHistoryFields</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Pu_value_addition</name>
+      <label>Pu value addition</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <default_value>0</default_value>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>1</weight>
+      <help_pre>When you want contacts of this (smart) group to increase their pu values based on membership of this group then choose the addition</help_pre>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_value_addition_72</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_value_addition_20151228190036</option_group_name>
+      <custom_group_name>Pu_Automation</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Automated_Pu_Description</name>
+      <label>Automated Pu Description</label>
+      <data_type>String</data_type>
+      <html_type>Text</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>2</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>automated_pu_description_75</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Pu_Automation</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Automated_Pu_How</name>
+      <label>Automated Pu How</label>
+      <data_type>Memo</data_type>
+      <html_type>TextArea</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>10</weight>
+      <attributes>rows=4, cols=60</attributes>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>automated_pu_how_77</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Pu_Automation</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Automated_Pu_Action</name>
+      <label>Automated Pu Action</label>
+      <data_type>Int</data_type>
+      <html_type>Select</html_type>
+      <is_required>0</is_required>
+      <is_searchable>0</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>9</weight>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>automated_pu_action_78</column_name>
+      <in_selector>0</in_selector>
+      <option_group_name>pu_action_20150601084519</option_group_name>
+      <custom_group_name>Pu_Automation</custom_group_name>
+    </CustomField>
+    <CustomField>
+      <name>Pu_Manual_Close</name>
+      <label>Manual Close</label>
+      <data_type>Boolean</data_type>
+      <html_type>Radio</html_type>
+      <default_value>0</default_value>
+      <is_required>0</is_required>
+      <is_searchable>1</is_searchable>
+      <is_search_range>0</is_search_range>
+      <weight>10</weight>
+      <help_pre>Do you want CiviCRM users to be able to close the Pu issue created by this group?</help_pre>
+      <is_active>1</is_active>
+      <is_view>0</is_view>
+      <text_length>255</text_length>
+      <note_columns>60</note_columns>
+      <note_rows>4</note_rows>
+      <column_name>pu_manual_close</column_name>
+      <in_selector>0</in_selector>
+      <custom_group_name>Pu_Automation</custom_group_name>
+    </CustomField>
+        */
+
+
+        /*    <OptionGroup>
+      <name>pu_value_addition_20151228190036</name>
+      <title>Pu value addition</title>
+      <is_reserved>1</is_reserved>
+      <is_active>1</is_active>
+    </OptionGroup>*/
+
+
+
+        /*
+             <OptionValue>
+      <label>Small</label>
+      <value>1</value>
+      <name>Small</name>
+      <is_default>0</is_default>
+      <weight>1</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_value_addition_20151228190036</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Medium</label>
+      <value>2</value>
+      <name>Medium</name>
+      <is_default>0</is_default>
+      <weight>2</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_value_addition_20151228190036</option_group_name>
+    </OptionValue>
+    <OptionValue>
+      <label>Large</label>
+      <value>3</value>
+      <name>Large</name>
+      <is_default>0</is_default>
+      <weight>3</weight>
+      <is_optgroup>0</is_optgroup>
+      <is_reserved>0</is_reserved>
+      <is_active>1</is_active>
+      <option_group_name>pu_value_addition_20151228190036</option_group_name>
+    </OptionValue>
+         */
+
+
         // check 2 puChanges Activities
 
 
@@ -345,6 +549,24 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
         }
 
         //remove existing Report.
+
+    /*    return array (
+            0 =>
+                array (
+                    'name' => 'CRM_Dataquality_Form_Report_PuReport',
+                    'entity' => 'ReportTemplate',
+                    'params' =>
+                        array (
+                            'version' => 3,
+                            'label' => 'PuReport',
+                            'description' => 'PuReport (net.trinfinity.orgis.mi.dataquality)',
+                            'class_name' => 'CRM_Dataquality_Form_Report_PuReport',
+                            'report_url' => 'net.trinfinity.orgis.mi.dataquality/pureport',
+                            'component' => '',
+                        ),
+                ),
+        );*/
+
         return true;
 
     }
