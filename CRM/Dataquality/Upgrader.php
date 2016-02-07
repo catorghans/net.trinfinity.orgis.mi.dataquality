@@ -50,6 +50,10 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
      * return TRUE;
      * } // */
 
+    public function enable(){
+        CRM_Dataquality_Config::singleton();
+    }
+
     public function upgrade_1001()
     {
         //add new fields

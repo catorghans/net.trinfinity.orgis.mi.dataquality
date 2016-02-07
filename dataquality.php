@@ -91,12 +91,12 @@ function dataquality_civicrm_uninstall() {
 function dataquality_civicrm_enable() {
 
     // instantiate config to create config items if required
-    $settings = civicrm_api3('Setting', 'Getsingle', array());
+  /*  $settings = civicrm_api3('Setting', 'Getsingle', array());
     require_once $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/CRM/Dataquality/Config.php';
     require_once $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/CRM/Dataquality/Utils.php';
     require_once $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/CRM/Dataquality/ProfileField.php';
     require_once $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/CRM/Dataquality/ProfileGroup.php';
-    CRM_Dataquality_Config::singleton();
+    CRM_Dataquality_Config::singleton();*/
 
   _dataquality_civix_civicrm_enable();
 

@@ -165,7 +165,6 @@ class CRM_Dataquality_Config {
     foreach ($groups as $params) {
       $group = new CRM_Dataquality_ProfileGroup($params);
       $customGroup = $group->create();
-      CRM_Core_Error::debug_log_message("setProfiles - Config.php:".print_r($customGroup,true));
       foreach ($params["fields"] as $profilefieldname => $profilefield){
         $profilefield["uf_group_id"] = $customGroup["id"];
         $field = new CRM_Dataquality_ProfileField($profilefield);

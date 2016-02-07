@@ -58,8 +58,24 @@ class CRM_Dataquality_ProfileGroup
      */
     public function getProfileGroupWithName() {
         try {
-            $tag = civicrm_api3('UFGroup', 'Getsingle', array('name' => $this->_apiParams['name']));
-            return $tag;
+            $groups = civicrm_api3('UFGroup', 'Get', array('name' => array('LIKE' => $this->_apiParams['name']."%")));
+            $foundgroup = null;
+
+            foreach ($groups["values"] as $groupid => $group){
+                if ($group["id"]){
+                    $groupid = $group["id"];
+                    if ($group["name"] ==  $this->_apiParams['name']."_".$groupid){
+                        $foundgroup = $group;
+                        break;
+                    }
+                    elseif ($group["name"] == $this->_apiParams["name"]){
+                        $foundgroup = $group;
+                        break;
+                    }
+                }
+
+            }
+            return $foundgroup;
         } catch (CiviCRM_API3_Exception $ex) {
             return FALSE;
         }
