@@ -36,7 +36,7 @@ class CRM_Dataquality_ProfileGroup
         if (!isset($this->_apiParams['is_active'])) {
             $this->_apiParams['is_active'] = 1;
             if (empty($this->_apiParams['description']) || !isset($this->_apiParams['description'])) {
-                $this->_apiParams['description'] = CRM_Civiconfig_Utils::buildLabelFromName($this->_apiParams['name']);
+                $this->_apiParams['description'] = CRM_Dataquality_Utils::buildLabelFromName($this->_apiParams['name']);
             }
         }
         try {

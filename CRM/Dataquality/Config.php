@@ -19,12 +19,17 @@ class CRM_Dataquality_Config {
 
     $settings = civicrm_api3('Setting', 'Getsingle', array());
     $this->resourcesPath = $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/resources/';
+    $this->setContactTypes();
+    $this->setMembershipTypes();
     $this->setRelationshipTypes();
     $this->setOptionGroups();
     $this->setGroups();
+    $this->setEventTypes();
+    $this->setActivityTypes();
     $this->setTags();
-    // customData as almost last one because it might need one of the previous ones (option group, relationship types)
+    // customData as last one because it might need one of the previous ones (option group, relationship types)
     $this->setCustomData();
+
 
     // customProfiles as last one because it might need customData;
     $this->setProfiles();
@@ -53,12 +58,32 @@ class CRM_Dataquality_Config {
     $jsonFile = $this->resourcesPath.'relationship_types.json';
     if (!file_exists($jsonFile)) {
       throw new Exception('Could not load relationship types configuration file for extension,
-      contact your system administrator!'.$jsonFile);
+      contact your system administrator!');
     }
     $relationshipTypesJson = file_get_contents($jsonFile);
     $relationshipTypes = json_decode($relationshipTypesJson, true);
     foreach ($relationshipTypes as $relationName => $params) {
-      CRM_Dataquality_Utils::createRelationshipType($params);
+      $relationshipType = new CRM_Dataquality_RelationshipType();
+      $relationshipType->create($params);
+    }
+  }
+
+  /**
+   * Method to create or get membership types
+   *
+   * @throws Exception when resource file could not be loaded
+   */
+  protected function setMembershipTypes() {
+    $jsonFile = $this->resourcesPath.'membership_types.json';
+    if (!file_exists($jsonFile)) {
+      throw new Exception('Could not load membership types configuration file for extension,
+      contact your system administrator!');
+    }
+    $membershipTypesJson = file_get_contents($jsonFile);
+    $membershipTypes = json_decode($membershipTypesJson, true);
+    foreach ($membershipTypes as $membershipName => $params) {
+      $membershipType = new CRM_Dataquality_MembershipType();
+      $membershipType->create($params);
     }
   }
 
@@ -77,7 +102,68 @@ class CRM_Dataquality_Config {
     $optionGroupsJson = file_get_contents($jsonFile);
     $optionGroups = json_decode($optionGroupsJson, true);
     foreach ($optionGroups as $name => $optionGroupParams) {
-      CRM_Dataquality_Utils::createOptionGroup($optionGroupParams);
+      $optionGroup = new CRM_Dataquality_OptionGroup();
+      $optionGroup->create($optionGroupParams);
+    }
+  }
+
+  /**
+   * Method to create contact types
+   *
+   * @throws Exception when resource file not found
+   * @access protected
+   */
+  protected function setContactTypes() {
+    $jsonFile = $this->resourcesPath.'contact_sub_types.json';
+    if (!file_exists($jsonFile)) {
+      throw new Exception('Could not load contact_sub_types configuration file for extension,
+      contact your system administrator!');
+    }
+    $contactTypesJson = file_get_contents($jsonFile);
+    $contactTypes = json_decode($contactTypesJson, true);
+    foreach ($contactTypes as $name => $params) {
+      $contactType = new CRM_Dataquality_ContactType();
+      $contactType->create($params);
+    }
+  }
+
+  /**
+   * Method to create event types
+   *
+   * @throws Exception when resource file not found
+   * @access protected
+   */
+  protected function setEventTypes() {
+    $jsonFile = $this->resourcesPath.'event_types.json';
+    if (!file_exists($jsonFile)) {
+      throw new Exception('Could not load event_types configuration file for extension,
+      contact your system administrator!');
+    }
+    $eventTypesJson = file_get_contents($jsonFile);
+    $eventTypes = json_decode($eventTypesJson, true);
+    foreach ($eventTypes as $name => $params) {
+      $eventType = new CRM_Dataquality_EventType();
+      $eventType->create($params);
+    }
+  }
+
+  /**
+   * Method to create activity types
+   *
+   * @throws Exception when resource file not found
+   * @access protected
+   */
+  protected function setActivityTypes() {
+    $jsonFile = $this->resourcesPath.'activity_types.json';
+    if (!file_exists($jsonFile)) {
+      throw new Exception('Could not load activity_types configuration file for extension,
+      contact your system administrator!');
+    }
+    $activityTypesJson = file_get_contents($jsonFile);
+    $activityTypes = json_decode($activityTypesJson, true);
+    foreach ($activityTypes as $name => $params) {
+      $activityType = new CRM_Dataquality_ActivityType();
+      $activityType->create($params);
     }
   }
 
@@ -95,7 +181,8 @@ class CRM_Dataquality_Config {
     $groupJson = file_get_contents($jsonFile);
     $groups = json_decode($groupJson, true);
     foreach ($groups as $params) {
-      CRM_Dataquality_Utils::createGroup($params);
+      $group = new CRM_Dataquality_Group();
+      $group->create($params);
     }
   }
 
@@ -113,7 +200,8 @@ class CRM_Dataquality_Config {
     $tagsJson = file_get_contents($jsonFile);
     $tags = json_decode($tagsJson, true);
     foreach ($tags as $params) {
-      CRM_Dataquality_Utils::createTag($params);
+      $tag = new CRM_Dataquality_Tag();
+      $tag->create($params);
     }
   }
 
@@ -130,22 +218,16 @@ class CRM_Dataquality_Config {
     }
     $customDataJson = file_get_contents($jsonFile);
     $customData = json_decode($customDataJson, true);
-    CRM_Core_Error::debug_log_message($jsonFile." ".json_last_error_msg());
-
     foreach ($customData as $customGroupName => $customGroupData) {
-      $customGroupParams = $this->buildCustomGroupParams($customGroupData);
-      $customGroup = CRM_Dataquality_Utils::createCustomGroup($customGroupParams);
+      $customGroup = new CRM_Dataquality_CustomGroup();
+      $created = $customGroup->create($customGroupData);
       foreach ($customGroupData['fields'] as $customFieldName => $customFieldData) {
-        $customFieldData['custom_group_id'] = $customGroup['id'];
-        $customFieldParams = $customFieldData;
-        $customField = CRM_Dataquality_Utils::createCustomField($customFieldParams);
-        // weird fix because api does not treat option groups kindly
-        if (isset($customFieldParams['option_group'])) {
-     //     $this->fixCustomFieldOptionGroups($customField, $customFieldData['option_group']);
-        }
+        $customFieldData['custom_group_id'] = $created['id'];
+        $customField = new CRM_Dataquality_CustomField();
+        $customField->create($customFieldData);
       }
       // remove custom fields that are still on install but no longer in config
-      CRM_Dataquality_Utils::removeUnwantedCustomFields($customGroup['id'], $customGroupData);
+      CRM_Dataquality_CustomField::removeUnwantedCustomFields($created['id'], $customGroupData);
     }
   }
 
@@ -190,55 +272,5 @@ class CRM_Dataquality_Config {
     );
     CRM_Core_DAO::executeQuery($qry, $params);
     civicrm_api3('OptionGroup', 'Delete', array('id' => $customField['option_group_id']));
-  }
-
-  /**
-   * Method to build param list for custom group creation
-   *
-   * @param array $customGroupData
-   * @return array $customGroupParams
-   * @access protected
-   */
-  protected function buildCustomGroupParams($customGroupData) {
-    $customGroupParams = array();
-    foreach ($customGroupData as $name => $value) {
-      if ($name != 'fields') {
-        $customGroupParams[$name] = $value;
-      }
-    }
-    // get relationship_type_id if extends relationship and extends_entity_column_value is set
-    if ($customGroupParams['extends'] == 'Relationship') {
-      if (isset($customGroupParams['extends_entity_column_value'])
-        && !empty($customGroupParams['extends_entity_column_value'])) {
-        $relationshipType = CRM_Dataquality_Utils::getRelationshipTypeWithName($customGroupParams['extends_entity_column_value']);
-        if (!empty($relationshipType)) {
-          $customGroupParams['extends_entity_column_value'] = $relationshipType['id'];
-        }
-      }
-    }
-    return $customGroupParams;
-  }
-
-  /**
-   * Method to build param list for custom field creation
-   *
-   * @param array $customFieldData
-   * @return array $customFieldParams
-   * @access protected
-   */
-  protected function buildCustomFieldParams($customFieldData) {
-    $customFieldParams = array();
-    foreach ($customFieldData as $name => $value) {
-      if ($name == "option_group") {
-        $optionGroup = CRM_Dataquality_Utils::getOptionGroupWithName($value);
-        if (empty($optionGroup)) {
-          $optionGroup = CRM_Dataquality_Utils::createOptionGroup(array('name' => $value));
-        }
-        $customFieldParams['option_group_id'] = $optionGroup['id'];
-      } else {
-        $customFieldParams[$name] = $value;
-      }
-    }
-    return $customFieldParams;
   }
 }

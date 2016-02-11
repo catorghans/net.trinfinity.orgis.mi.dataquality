@@ -3,18 +3,120 @@
     "name":"pu_overview_20150601084519",
     "title":"Pu - Overview",
     "is_active":"1",
-    "is_reserved":"1"
+    "is_reserved":"1",
+    "option_values": {
+      "No_pu": {
+        "name": "No_pu",
+        "value": "1",
+        "label": "No pu",
+        "is_active": 1
+      },
+      "Tiny_bit_pu": {
+        "name": "Tiny_bit_pu",
+        "value": "2",
+        "label": "Tiny bit pu",
+        "is_active": 1
+      },
+      "A little bit pu": {
+        "name": "A little bit pu",
+        "value": "3",
+        "label": "A little bit pu",
+        "is_active": 1
+      },
+      "Some_pu": {
+        "name": "Some_pu",
+        "value": "4",
+        "label": "Some pu",
+        "is_active": 1
+      },
+      "Quite_some_pu": {
+        "name": "Quite_some_pu",
+        "value": "5",
+        "label": "Quite some pu",
+        "is_active": 1
+      },
+      "More_pu": {
+        "name": "More_pu",
+        "value": "6",
+        "label": "More pu",
+        "is_active": 1
+      },
+      "A_lot_of_pu": {
+        "name": "A_lot_of_pu",
+        "value": "7",
+        "label": "A lot of pu",
+        "is_active": 1
+      },
+      "Mostly_pu": {
+        "name": "Mostly_pu",
+        "value": "8",
+        "label": "Mostly pu",
+        "is_active": 1
+      },
+      "Allmost_all_pu": {
+        "name": "Allmost_all_pu",
+        "value": "9",
+        "label": "Allmost all pu",
+        "is_active": 1
+      },
+      "All_pu": {
+        "name": "All_pu",
+        "value": "10",
+        "label": "All pu",
+        "is_active": 1
+      }
+    }
   },
   "puAction20150601084519":{
     "name":"pu_action_20150601084519",
     "title":"Pu - Action",
     "is_active":"1",
-    "is_reserved":"1"
+    "is_reserved":"1",
+    "option_values": {
+      "Solve": {
+        "name": "Solve",
+        "value": "1",
+        "label": "Solve",
+        "is_active": 1
+      },
+      "Avoid": {
+        "name": "Avoid",
+        "value": "2",
+        "label": "Avoid",
+        "is_active": 1
+      },
+      "Acknowledge": {
+        "name": "Acknowledge",
+        "value": "3",
+        "label": "Acknowledge",
+        "is_active": 1
+      }
+    }
   },
-  "puValueAddition20151228190036":{
-    "name":"pu_value_addition_20151228190036",
-    "title":"Pu value addition",
-    "is_active":"1",
-    "is_reserved":"1"
+  "puValueAddition20151228190036": {
+    "name": "pu_value_addition_20151228190036",
+    "title": "Pu value addition",
+    "is_active": "1",
+    "is_reserved": "1",
+    "option_values": {
+      "Small": {
+        "name": "Small",
+        "value": "1",
+        "label": "Small",
+        "is_active": 1
+      },
+      "Medium": {
+        "name": "Medium",
+        "value": "2",
+        "label": "Medium",
+        "is_active": 1
+      },
+      "Large": {
+        "name": "Large",
+        "value": "3",
+        "label": "Large",
+        "is_active": 1
+      }
+    }
   }
 }
