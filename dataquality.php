@@ -97,7 +97,8 @@ function dataquality_civicrm_enable() {
         'name' => "Pu Automation",
     ));
 
-    if ($result["count"] == 0){
+
+    if ($result == 0){
         $params = array(
             'sequential' => 1,
             'name'          => 'Pu Automation',

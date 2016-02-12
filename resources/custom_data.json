@@ -30,6 +30,7 @@
         "note_rows": "4",
         "column_name": "pu_overview_1",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_overview_20150601084519"
       },
       "Pu_Contact": {
@@ -65,6 +66,7 @@
         "note_rows": "4",
         "column_name": "pu_action_3",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_action_20150601084519"
       },
       "Pu_How": {
@@ -116,6 +118,7 @@
         "is_view": "1",
         "column_name": "old_pu_value",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_overview_20150601084519"
       },
       "old_pu_description": {
@@ -149,6 +152,7 @@
         "note_rows": "4",
         "column_name": "old_pu_action",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_action_20150601084519"
        },
       "old_pu_how": {
@@ -179,6 +183,7 @@
         "is_view": "1",
         "column_name": "new_pu_value",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_value_addition_20151228190036"
       },
       "new_pu_description": {
@@ -212,6 +217,7 @@
         "note_rows": "4",
         "column_name": "new_pu_action",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_action_20150601084519"
       },
       "new_pu_how": {
@@ -301,6 +307,7 @@
         "note_rows": "4",
         "column_name": "pu_value_addition_72",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_value_addition_20151228190036"
       },
       "Automated_Pu_Description": {
@@ -353,6 +360,7 @@
         "note_rows": "4",
         "column_name": "automated_pu_action_78",
         "in_selector": "0",
+        "option_type" : "0",
         "option_group": "pu_action_20150601084519"
       },
       "Pu_Manual_Close": {
