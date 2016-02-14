@@ -39,6 +39,9 @@ class CRM_Dataquality_CustomField {
         $created = $optionGroup->create(array('name' => $this->_apiParams['option_group']));
         $this->_apiParams['option_group_id'] = $created['id'];
       }
+      if (empty($this->_apiParams['option_type'])){
+        $this->_apiParams["option_type"] = "0";
+      }
       unset($this->_apiParams['option_group']);
     }
   }
