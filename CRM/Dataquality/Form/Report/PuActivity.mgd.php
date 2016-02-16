@@ -12,7 +12,7 @@ return array (
     array (
       'version' => 3,
       'label' => 'PuActivity',
-      'description' => 'PuActivity (net.trinfinity.orgis.mi.dataquality)',
+      'description' => 'Pu Report',
       'class_name' => 'CRM_Dataquality_Form_Report_PuActivity',
       'report_url' => 'net.trinfinity.orgis.mi.dataquality/puactivity',
       'component' => '',
