@@ -93,6 +93,8 @@ class CRM_Dataquality_PuAutomation
                 'is_active' => 1,
                 'options' => array('limit' => 100000),
             ));
+       //     CRM_Core_Error::debug_log_message("pu vaf:".$this->pu_value_addition_field." all groups for ".print_r($resultgroups,true));
+
             if ($resultgroups["is_error"] == 0) {
                 foreach ($resultgroups["values"] as $group) {
                     if ($group[$this->pu_value_addition_field] > 0) {
@@ -142,6 +144,7 @@ class CRM_Dataquality_PuAutomation
         //smart groups
 
         $contactgroups = CRM_Contact_BAO_GroupContactCache::contactGroup($contactid);
+   //     CRM_Core_Error::debug_log_message("pu groups for ".$contactid.":".print_r($contactgroups,true));
 
         foreach ($this->pu_automation_smart_groups as $group){
             $currentusergroupmember = false;
@@ -183,7 +186,7 @@ class CRM_Dataquality_PuAutomation
                         $this->pu_automation_field => 1,
                     );
                     $resultactivity = civicrm_api3('Activity', 'create', $params);
-                //    CRM_Core_Error::debug_log_message("pu activity created:".print_r($resultactivity,true));
+        //            CRM_Core_Error::debug_log_message("pu activity created:".print_r($resultactivity,true));
 
 
                 }
@@ -212,7 +215,7 @@ class CRM_Dataquality_PuAutomation
         }
         //automated pu activities from groups where there is no group anymore
         //close activity
-        CRM_Core_Error::debug_log_message('activities array'.print_r($pu_activities,true));
+   //     CRM_Core_Error::debug_log_message('activities array'.print_r($pu_activities,true));
         foreach ($pu_activities as $pu_activity) {
             if (!isset($pu_activity["found"]) || ($pu_activity["found"] == false)){
 
