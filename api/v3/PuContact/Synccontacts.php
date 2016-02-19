@@ -9,8 +9,23 @@ function civicrm_api3_pu_contact_synccontacts ($params) {
 
   //get enabled contacts
     $parameters = array();
-
     $sql = "select id from civicrm_contact where is_deleted = 0";
+
+    $lock = new CRM_Core_Lock('civimail.job.pusync');
+    if (!$lock->isAcquired()) {
+        throw new API_Exception('Could not acquire lock, another pu sync process is running');
+    }
+
+    $limit = CRM_Utils_Array::value('limit', $params, 0);
+
+
+
+
+    if (isset($limit) && $limit > 0){
+
+
+    }
+
 
     try{
         $dpu = new CRM_Dataquality_PuAutomation();
@@ -29,6 +44,7 @@ function civicrm_api3_pu_contact_synccontacts ($params) {
         $values="";
     }
 
+    $lock->release();
 
     return civicrm_api3_create_success();
 
