@@ -56,6 +56,9 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
 
     public function upgrade_1001()
     {
+        CRM_Dataquality_Config::singleton();
+
+
         //move pu contact fields to activity fields
         $pu_value_field = Null;
         $pu_description_field = Null;
@@ -72,23 +75,6 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
 
                 //set label
 
-
-                //set right option group
-                $result2 = civicrm_api3('OptionGroup', 'getsingle', array(
-                    'sequential' => 1,
-                    'name' => "pu_value_addition_20151228190036",
-                ));
-                $optiongroupid = $result["id"];
-                foreach ($result["values"] as $id => $value) { // 1 expected
-                    //if optiongroupid or label is false, update it
-                    if ($value["label"] != "Pu value" || $value["custom_group_id"] != $optiongroupid) {
-                        $result2 = civicrm_api3('CustomField', 'create', array(
-                            'id' => $result["id"],
-                            'label' => "Pu value",
-                            'custom_group_id' => $optiongroupid,
-                        ));
-                    }
-                }
             }
         } catch (Exception $e) {
             // if it fails then for some reason this old table likely does not exist, not harm done.
@@ -100,15 +86,6 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             if ($result["id"]) {
                 $pu_description_field = "custom_" . $result["id"];
 
-                foreach ($result["values"] as $id => $value) { // 1 expected
-                    //if optiongroupid or label is false, update it
-                    if ($value["label"] != "Pu Description" ) {
-                        $result2 = civicrm_api3('CustomField', 'create', array(
-                            'id' => $result["id"],
-                            'label' => "Pu Description",
-                        ));
-                    }
-                }
 
             }
         } catch (Exception $e) {
@@ -122,15 +99,6 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             if ($result["id"]){
                 $pu_action_field = "custom_".$result["id"];
 
-                foreach ($result["values"] as $id => $value) { // 1 expected
-                    //if optiongroupid or label is false, update it
-                    if ($value["label"] != "Pu Action" ) {
-                        $result2 = civicrm_api3('CustomField', 'create', array(
-                            'id' => $result["id"],
-                            'label' => "Pu Action",
-                        ));
-                    }
-                }
             }
         } catch (Exception $e) {
             // if it fails then for some reason this old table likely does not exist, not harm done.
@@ -142,15 +110,6 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             if ($result["id"]){
                 $pu_how_field = "custom_".$result["id"];
 
-                foreach ($result["values"] as $id => $value) { // 1 expected
-                    //if optiongroupid or label is false, update it
-                    if ($value["label"] != "Pu How" ) {
-                        $result2 = civicrm_api3('CustomField', 'create', array(
-                            'id' => $result["id"],
-                            'label' => "Pu How",
-                        ));
-                    }
-                }
             }
         } catch (Exception $e) {
             // if it fails then for some reason this old table likely does not exist, not harm done.
@@ -192,27 +151,64 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             }
 
         } catch (Exception $e) {
-            // if it fails then for some reason this old table likely does not exist, not harm done.
+            // if it fails then for some reason this old table likely does not exist, no harm done.
         }
 
         //remove existing Report.
 
-    /*    return array (
-            0 =>
-                array (
-                    'name' => 'CRM_Dataquality_Form_Report_PuReport',
-                    'entity' => 'ReportTemplate',
-                    'params' =>
-                        array (
-                            'version' => 3,
-                            'label' => 'PuReport',
-                            'description' => 'PuReport (net.trinfinity.orgis.mi.dataquality)',
-                            'class_name' => 'CRM_Dataquality_Form_Report_PuReport',
-                            'report_url' => 'net.trinfinity.orgis.mi.dataquality/pureport',
-                            'component' => '',
-                        ),
-                ),
-        );*/
+        $result = civicrm_api3('ReportInstance', 'get', array(
+            'sequential' => 1,
+            'report_id' => "net.trinfinity.orgis.mi.dataquality/pureport",
+            'options' => array('limit' => 1000),
+        ));
+
+        if (isset($result["values"])) foreach ($result["values"] as $report) {
+            $id = $report["id"];
+            civicrm_api3("ReportInstance" , "delete" , array("id" => $id));
+        }
+
+        $result = civicrm_api3('ReportTemplate', 'get', array(
+            'sequential' => 1,
+            'value' => "net.trinfinity.orgis.mi.dataquality/pureport",
+        ));
+        if (isset($result["values"])) foreach ($result["values"] as $report) {
+            $id = $report["id"];
+            civicrm_api3("ReportTemplate" , "delete" , array("id" => $id));
+        }
+
+        //remove custom fields;
+        $result = civicrm_api3('CustomGroup', 'getsingle', array(
+            'sequential' => 1,
+            'return' => "id",
+            'name' => "Pu_fields",
+        ));
+        if (isset($result["id"]) && is_numeric($result["id"])){
+            $groupid = $result["id"];
+
+            $fieldresults = civicrm_api3('CustomField', 'get', array(
+                'sequential' => 1,
+                'return' => "id",
+                'custom_group_id' => $groupid,
+            ));
+            if (isset($fieldresults["values"])) foreach($fieldresults["values"] as $field){
+                civicrm_api3("CustomField","delete", array("id" => $field["id"]));
+            }
+            civicrm_api3("CustomGroup", "delete", array("id" => $groupid));
+        }
+
+
+        //Pu_Overview
+
+
+        //2Pu_Contact
+
+        //3Pu_Action
+
+        //4Pu_How
+
+
+        //remove fieldset
+        //Pu_fields
 
         return true;
 
