@@ -1,4 +1,3 @@
-{crmAPI var='pu_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Overview'}
 {crmAPI var='pu_activity_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_value'}
 {assign var=pu_activity_field_value value="custom_`$pu_activity_field.id`"}
 {crmAPI var='pu_activity_desc_field' entity='CustomField' action='getsingle' sequential=1 name='new_pu_description'}
@@ -14,22 +13,7 @@
 {crmAPI var='pu_manual_close_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Manual_Close'}
 {assign var=pu_manual_close_field_value value="custom_`$pu_manual_close_field.id`"}
 
-{crmAPI var='pu_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_field.id`"}
-{assign var=pu_field_value value="custom_`$pu_field.id`"}
-{crmAPI var='pu_action' entity='CustomField' action='getsingle' sequential=1 name='Pu_Action'}
-{crmAPI var='pu_action_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_action.id`"}
-{assign var=pu_field_action value="custom_`$pu_action.id`"}
-{assign var=pu value="`$pu_value.$pu_field_value`"}
-{if $pu > 0}
- {crmAPI var='pudesc' entity='OptionValue' action='getsingle' sequential=1 option_group_id=$pu_field.option_group_id value=$pu return='label'}
- {crmAPI var='pu_n_field' entity='CustomField' action='getsingle' sequential=1 name='Pu_Contact'}
- {crmAPI var='pu_n_value' entity='Contact' action='getsingle' version='3' id="$contactId" return="custom_`$pu_n_field.id`"}
- {assign var=pu_n_field_value value="custom_`$pu_n_field.id`"}
- {assign var=pu_n value="`$pu_n_value.$pu_n_field_value`"}
-{else}
- {assign var=pu_n_field_value value="0"}
- {assign var=pu_n value=""}
-{/if}
+
 
 <div id="pufield" class="crm-inline-edit-container"><span id="pusign" style="position:relative;float:right;top:-30px">&#8857;<span></div>
 {literal}

@@ -232,7 +232,7 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
         return;
     }
 
-   try {
+/*   try {
      $result = civicrm_api3('CustomGroup', 'getsingle', array(
        'return' => "name",
        'id' => $groupID,
@@ -393,12 +393,12 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 
               'target_id' => $cid,
               'subject' => $subject,
-            ));*/
+            ));
          }
         }
      }
 
-   }
+   }*/
 
 }
 
