@@ -22,4 +22,8 @@ This gives the person responsible for data quality a much deeper insight into th
 A data quality manager will be able to search on each doubt-level, easily identifying records that require investigation.
 On each individual contact record there is a visual indication of the records associated doubt status, creating the oppertunity to act upon it as and when appropriate.
 
+From version 2 a data quality manager can automate doubts to the contact database, by configuring the doubt fields in a smart search group.
+
 This tool has been created together with The Mirdan Institute and implements parts of the Mirdan methods.
+
+For more information look at http://orgis.com/en/content/pu-not-knowing-tool-civicrm
