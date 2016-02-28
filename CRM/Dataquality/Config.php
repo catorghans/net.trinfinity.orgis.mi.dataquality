@@ -237,6 +237,14 @@ class CRM_Dataquality_Config {
    * @throws Exception when resource file could not be loaded
    */
   protected function setProfiles() {
+    /*enforce reading new custom fields*/
+    CRM_Activity_BAO_Activity::$_exportableFields = null; //Sorry OO world, was no other way
+    CRM_Contact_BAO_Contact::$_importableFields = null; //idem
+
+    CRM_Core_BAO_Cache::deleteGroup('contact fields');
+    CRM_Core_BAO_UFField::getAvailableFieldsFlat(true);
+
+
     $jsonFile = $this->resourcesPath . 'profiles.json';
     if (!file_exists($jsonFile)) {
       throw new Exception('Could not load profiles configuration file for extension,
