@@ -45,7 +45,7 @@ class CRM_Dataquality_ProfileField
             $fieldData = $field['values'];
         } catch (CiviCRM_API3_Exception $ex) {
             throw new Exception('Could not create or update profile group with name'
-                .$this->_apiParams['name'].', error from API UFField Create: ' . $ex->getMessage());
+                .$this->_apiParams['field_name'].', error from API UFField Create: ' . $ex->getMessage());
         }
         return $fieldData[$field["id"]];
 
@@ -63,7 +63,7 @@ class CRM_Dataquality_ProfileField
                     $customfieldgroup = civicrm_api3('CustomGroup', 'getsingle', array(
                         'sequential' => 1,
                         'return' => "id",
-                        'table_name' => "civicrm_value_pu_history_fields",
+                        'table_name' => $table,
                     ));
                     $customfieldgroupid = $customfieldgroup["id"];
 
