@@ -18,6 +18,9 @@
 <div id="pufield" class="crm-inline-edit-container"><span id="pusign" style="position:relative;float:right;top:-30px">&#8857;<span></div>
 {literal}
 <style>
+   #pufield {
+       padding: 30px 0 0;
+   }
   .Pu_fields textarea { width: 90%;}
   .Pu_fields .crm-form-select { width: 30% !important;}
   .pu_activity.automated {
