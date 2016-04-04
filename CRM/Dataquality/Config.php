@@ -18,7 +18,17 @@ class CRM_Dataquality_Config {
   function __construct() {
 
     $settings = civicrm_api3('Setting', 'Getsingle', array());
-    $this->resourcesPath = $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/resources/';
+    $resourcesPath = $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/resources/';
+    try {
+      $Path = new \Civi\Core\Paths();
+      $resourcesPath = $Path->getPath($resourcesPath);
+    }
+    catch (Exception $e)  //CiviCRM 4.6 does not have \Civi\Core\Paths yet, so ignore it
+    {
+
+    }
+    $this->resourcesPath = $resourcesPath;
+
     $this->setContactTypes();
     $this->setMembershipTypes();
     $this->setRelationshipTypes();
