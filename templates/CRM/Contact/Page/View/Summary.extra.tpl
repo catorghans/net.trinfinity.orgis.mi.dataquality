@@ -53,6 +53,15 @@
 
 <script>
 
+	const PUCOLORS = [ "#000000", "#0000bb", "#bb0000", "#00bb00" ];
+	function getPuColor(action, defaultColor) { 
+		if (action<PUCOLORS.length) {
+			return PUCOLORS[action];
+		} else {
+			return (typeof defaulColor === 'undefined') ? PUCOLORS[0] : defaulColor;
+		}
+	}
+
     function create_pu_form(activity_id, readonly){
         contact_id = "{/literal}{$contactId}{literal}";
 
@@ -482,7 +491,7 @@ function set_pu(){
 function get_mini_pu_value(pu, puaction) {
   var ret = "";
     pusize = "15";
-    pucolor = "#000000";
+    pucolor = getPuColor(puaction);
     putext = "&#8857;";
     putitle = "";
     switch (pu){
@@ -496,15 +505,12 @@ function get_mini_pu_value(pu, puaction) {
     }
     switch (puaction){
         case "1":
-            pucolor = "#0000bb";
             putitle = "solve";
             break;
         case "2":
-            pucolor = "#bb0000";
             putitle = "circumvent";
             break;
         case "3":
-            pucolor = "#00bb00";
             putitle = "acknowlegde";
     }
     ret = "<span style='font-size:"+pusize+"px;color:"+pucolor+";' title='"+putitle+"'>"+putext+"</span>";
@@ -531,10 +537,7 @@ function get_mini_pu_value(pu, puaction) {
           pusize = 17+(pu*10);
           putext = "&#8857;";
           pudeco = "none";
-          pucolor="#666666";
-          if (puaction == 1) pucolor = "#0000bb";
-          else if (puaction == 2) pucolor = "#bb0000";
-          else if (puaction == 3) pucolor = "#00bb00";
+          pucolor=getPuColor(puaction, "#666666");
         }
         cj("#pusign").css("font-size",pusize+"px").css("text-decoration", pudeco).css("color", pucolor).html(putext);
    }
