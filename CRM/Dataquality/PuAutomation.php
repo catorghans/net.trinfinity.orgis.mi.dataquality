@@ -88,12 +88,12 @@ class CRM_Dataquality_PuAutomation
 
             $resultgroups = civicrm_api3('Group', 'get', array(
                 'sequential' => 1,
-                'return' => "id,name,saved_search_id,".$this->pu_value_addition_field.",title,".$this->pu_automation_action_field.",".$this->pu_automation_how_field,
+                'return' => "id,name,saved_search_id,".$this->pu_value_addition_field.",title,".$this->pu_automation_action_field.",".$this->pu_automation_description_field.",".$this->pu_automation_how_field,
                 $this->pu_value_addition_field => array('>=' => 1),
                 'is_active' => 1,
                 'options' => array('limit' => 100000),
             ));
-       //     CRM_Core_Error::debug_log_message("pu vaf:".$this->pu_value_addition_field." all groups for ".print_r($resultgroups,true));
+            CRM_Core_Error::debug_log_message("pu vaf:".$this->pu_value_addition_field." all groups for ".print_r($resultgroups,true));
 
             if ($resultgroups["is_error"] == 0) {
                 foreach ($resultgroups["values"] as $group) {
