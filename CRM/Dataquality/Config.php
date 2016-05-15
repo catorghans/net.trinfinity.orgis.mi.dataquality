@@ -20,8 +20,10 @@ class CRM_Dataquality_Config {
     $settings = civicrm_api3('Setting', 'Getsingle', array());
     $resourcesPath = $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/resources/';
     try {
-      $Path = new \Civi\Core\Paths();
-      $resourcesPath = $Path->getPath($resourcesPath);
+      if (class_exists('Civi\Core\Paths')) {
+        $Path = new \Civi\Core\Paths();
+        $resourcesPath = $Path->getPath($resourcesPath);
+      }
     }
     catch (Exception $e)  //CiviCRM 4.6 does not have \Civi\Core\Paths yet, so ignore it
     {
