@@ -87,7 +87,9 @@
                     .label( function (p) { return p.value.name; })
                     .title( function (p) { return p.value.name +" : "+ p.value.count; });
 
-               dataTable
+                var URL = "{/literal}{crmURL p='civicrm/contact/view' q='reset=1&cid=__tobereplacedwithcid__'}{literal}";
+                
+                dataTable
                     .dimension(id)
                     .group(function(d){ return ""; })
                     .size(25)
@@ -97,7 +99,7 @@
                                 return d.id;
                             },
                             function (d) {
-                                return "<a href='/civicrm/contact/view?reset=1&cid="+d.id+"'>"+d.display_name+"</a>";
+                                return "<a href='"+URL.replace('__tobereplacedwithcid__',d.id)+"'>"+d.display_name+"</a>";
                             },
                             function (d) {
                                 return d.name;
