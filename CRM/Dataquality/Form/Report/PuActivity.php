@@ -629,20 +629,20 @@ class CRM_Dataquality_Form_Report_PuActivity extends CRM_Report_Form {
             continue;
           }
           if (CRM_Utils_Array::value('type', $field) & CRM_Utils_Type::T_DATE) {
-            $relative = CRM_Utils_Array::value("{$fieldName}_relative", $this->_params);
-            $from = CRM_Utils_Array::value("{$fieldName}_from", $this->_params);
-            $to = CRM_Utils_Array::value("{$fieldName}_to", $this->_params);
+            $relative = $this->_params["{$fieldName}_relative"] ?? NULL;
+            $from = $this->_params["{$fieldName}_from"] ?? NULL;
+            $to = $this->_params["{$fieldName}_to"] ?? NULL;
 
             $clause = $this->dateClause($field['name'], $relative, $from, $to, $field['type']);
           }
           else {
-            $op = CRM_Utils_Array::value("{$fieldName}_op", $this->_params);
+            $op = $this->_params["{$fieldName}_op"] ?? NULL;
             if ($op && ($op != 'nnll' || $op != 'nll')) {
               $clause = $this->whereClause($field,
                 $op,
-                CRM_Utils_Array::value("{$fieldName}_value", $this->_params),
-                CRM_Utils_Array::value("{$fieldName}_min", $this->_params),
-                CRM_Utils_Array::value("{$fieldName}_max", $this->_params)
+                $this->_params["{$fieldName}_value"] ?? NULL,
+                $this->_params["{$fieldName}_min"] ?? NULL,
+                $this->_params["{$fieldName}_max"] ?? NULL
               );
               if ($fieldName == 'activity_type_id' &&
                 empty($this->_params['activity_type_id_value'])
@@ -889,7 +889,7 @@ GROUP BY civicrm_activity_id {$this->_having} {$this->_orderBy} {$this->_limit}"
         }
 
         $actActionLinks = CRM_Activity_Selector_Activity::actionLinks($row['civicrm_activity_activity_type_id'],
-          CRM_Utils_Array::value('civicrm_activity_source_record_id', $rows[$rowNum]),
+          $rows[$rowNum]['civicrm_activity_source_record_id'] ?? NULL,
           FALSE,
           $rows[$rowNum]['civicrm_activity_id']
         );
