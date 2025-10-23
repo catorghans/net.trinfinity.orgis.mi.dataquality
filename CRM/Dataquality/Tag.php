@@ -59,7 +59,7 @@ class CRM_Dataquality_Tag {
     }
     try {
       civicrm_api3('Tag', 'Create', $this->_apiParams);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update tag type with name'
         .$this->_apiParams['name'].', error from API Tag Create: ' . $ex->getMessage());
     }
@@ -76,7 +76,7 @@ class CRM_Dataquality_Tag {
   public function getWithName($name) {
     try {
       return civicrm_api3('Tag', 'Getsingle', array('name' => $name));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }

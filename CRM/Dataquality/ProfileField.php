@@ -43,7 +43,7 @@ class CRM_Dataquality_ProfileField
         try {
             $field = civicrm_api3('UFField', 'Create', $this->_apiParams);
             $fieldData = $field['values'];
-        } catch (CiviCRM_API3_Exception $ex) {
+        } catch (CRM_Core_Exception $ex) {
             throw new Exception('Could not create or update profile group with name'
                 .$this->_apiParams['field_name'].', error from API UFField Create: ' . $ex->getMessage());
         }
@@ -87,7 +87,7 @@ class CRM_Dataquality_ProfileField
 
             $tag = civicrm_api3('UFField', 'Getsingle', array('field_name' => $this->_apiParams['field_name']));
             return $tag;
-        } catch (CiviCRM_API3_Exception $ex) {
+        } catch (CRM_Core_Exception $ex) {
             return FALSE;
         }
     }

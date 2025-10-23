@@ -66,7 +66,7 @@ class CRM_Dataquality_CustomField {
       if (isset($params['option_group'])) {
         $this->fixOptionGroups($customField['values'], $params['option_group']);
       }
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('could not create or update custom field with name '.$this->_apiParams['name']
         .' in custom group '.$this->_apiParams['custom_group_id'].' error from API CustomField Create: '.$ex->getMessage());
     }
@@ -82,7 +82,7 @@ class CRM_Dataquality_CustomField {
   public function getWithNameCustomGroupId($name, $customGroupId) {
     try {
       return civicrm_api3('CustomField', 'Getsingle', array('name' => $name, 'custom_group_id' => $customGroupId));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
@@ -93,7 +93,7 @@ class CRM_Dataquality_CustomField {
    *
    * @param array $customField
    * @param string $optionGroupName
-   * @throws CiviCRM_API3_Exception
+   * @throws CRM_Core_Exception
    */
   protected function fixOptionGroups($customField, $optionGroupName) {
     $optionGroup = new CRM_Dataquality_OptionGroup();
@@ -132,7 +132,7 @@ class CRM_Dataquality_CustomField {
           civicrm_api3('CustomField', 'Delete', array('id' => $existingId));
         }
       }
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
     return TRUE;

@@ -22,7 +22,7 @@ class CRM_Dataquality_Utils {
     try {
       $customField = civicrm_api3('CustomField', 'Getsingle', array('name' => $customFieldName, 'custom_group_id' => $customGroupId));
       return $customField;
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
@@ -39,7 +39,7 @@ class CRM_Dataquality_Utils {
     try {
       $customGroup = civicrm_api3('CustomGroup', 'Getsingle', array('name' => $customGroupName));
       return $customGroup;
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
@@ -56,7 +56,7 @@ class CRM_Dataquality_Utils {
     try {
       $relationshipType = civicrm_api3('RelationshipType', 'Getsingle', array('name_a_b' => $nameAB));
       return $relationshipType;
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
@@ -73,7 +73,7 @@ class CRM_Dataquality_Utils {
     try {
       $group = civicrm_api3('Group', 'Getsingle', array('name' => $groupName));
       return $group;
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
@@ -90,7 +90,7 @@ class CRM_Dataquality_Utils {
     try {
       $tag = civicrm_api3('Tag', 'Getsingle', array('name' => $tagName));
       return $tag;
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
@@ -110,7 +110,7 @@ class CRM_Dataquality_Utils {
     try {
       $optionGroup = civicrm_api3('OptionGroup', 'Getsingle', $params);
       return $optionGroup;
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return array();
     }
   }
@@ -139,7 +139,7 @@ class CRM_Dataquality_Utils {
     try {
       $optionGroup = civicrm_api3('OptionGroup', 'Create', $params);
       $optionGroupData = $optionGroup['values'];
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update option_group type with name'
         .$params['name'].', error from API OptionGroup Create: ' . $ex->getMessage());
     }
@@ -186,7 +186,7 @@ class CRM_Dataquality_Utils {
         CRM_Core_DAO::executeQuery($query, $queryParams);
       }
       $groupData = $group['values'];
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update group type with name'
         .$params['name'].', error from API Group Create: ' . $ex->getMessage());
     }
@@ -219,7 +219,7 @@ class CRM_Dataquality_Utils {
     try {
       $tag = civicrm_api3('Tag', 'Create', $params);
       $tagData = $tag['values'];
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update tag type with name'
         .$params['name'].', error from API Tag Create: ' . $ex->getMessage());
     }
@@ -254,7 +254,7 @@ class CRM_Dataquality_Utils {
     }
     try {
       $relationshipType = civicrm_api3('RelationshipType', 'Create', $params);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update relationship type with name '.$params['name_a_b']
         .', error from API RelationshipType Create: '.$ex->getMessage());
     }
@@ -285,7 +285,7 @@ class CRM_Dataquality_Utils {
     }
     try {
       $customGroup = civicrm_api3('CustomGroup', 'Create', $params);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update custom group with name '.$params['name']
         .' to extend '.$params['extends'].', error from API CustomGroup Create: '.
         $ex->getMessage().", parameters : ".implode(";", $params));
@@ -318,7 +318,7 @@ class CRM_Dataquality_Utils {
     try {
       $customField = civicrm_api3('CustomField', 'Create', $params);
       CRM_Core_Error::debug_log_message(print_r($params,true).print_r($customField,true));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('could not create or update custom field with name '.$params['name']
         .' in custom group '.$params['custom_group_id'].' error from API CustomField Create: '.$ex->getMessage());
     }
@@ -367,7 +367,7 @@ class CRM_Dataquality_Utils {
       }
       $valueList[0] = ts('- select -');
       asort($valueList);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not find an option group with name '.$optionGroupName
         .' contact your system administrator. Error from API OptionGroup Getvalue: '.$ex->getMessage());
     }
@@ -396,7 +396,7 @@ class CRM_Dataquality_Utils {
           civicrm_api3('CustomField', 'Delete', array('id' => $existingId));
         }
       }
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
     return TRUE;

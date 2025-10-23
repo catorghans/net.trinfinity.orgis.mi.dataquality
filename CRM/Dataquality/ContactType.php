@@ -41,7 +41,7 @@ class CRM_Dataquality_ContactType {
     }
     try {
       civicrm_api3('ContactType', 'Create', $this->_apiParams);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update contact type with name '.$this->_apiParams['name']
         .', error from API ContactType Create: '.$ex->getMessage());
     }
@@ -58,7 +58,7 @@ class CRM_Dataquality_ContactType {
   public function getWithName($contactTypeName) {
     try {
       return civicrm_api3('ContactType', 'Getsingle', array('name' => $contactTypeName));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }

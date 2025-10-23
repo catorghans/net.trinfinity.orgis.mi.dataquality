@@ -42,7 +42,7 @@ class CRM_Dataquality_ProfileGroup
         try {
             $group = civicrm_api3('UFGroup', 'Create', $this->_apiParams);
             $groupData = $group['values'];
-        } catch (CiviCRM_API3_Exception $ex) {
+        } catch (CRM_Core_Exception $ex) {
             throw new Exception('Could not create or update profile group with name'
                 .$this->_apiParams['name'].', error from API UFGroup Create: ' . $ex->getMessage());
         }
@@ -76,7 +76,7 @@ class CRM_Dataquality_ProfileGroup
 
             }
             return $foundgroup;
-        } catch (CiviCRM_API3_Exception $ex) {
+        } catch (CRM_Core_Exception $ex) {
             return FALSE;
         }
     }

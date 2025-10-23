@@ -46,7 +46,7 @@ class CRM_Dataquality_Group {
     try {
       $group = civicrm_api3('Group', 'Create', $this->_apiParams);
       $this->fixName($group);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update group type with name'
         .$this->_apiParams['name'].', error from API Group Create: ' . $ex->getMessage());
     }
@@ -62,7 +62,7 @@ class CRM_Dataquality_Group {
   public function getWithName($groupName) {
     try {
       return civicrm_api3('Group', 'Getsingle', array('name' => $groupName));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }
