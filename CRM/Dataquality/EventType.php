@@ -20,7 +20,7 @@ class CRM_Dataquality_EventType extends CRM_Dataquality_OptionValue {
     $this->_apiParams = $params;
     try {
       $this->_apiParams['option_group_id'] = $this->getOptionGroupId();
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Unable to find option group for event_type in CRM_Dataquality_EventType, contact your system administrator');
     }
   }
@@ -29,7 +29,7 @@ class CRM_Dataquality_EventType extends CRM_Dataquality_OptionValue {
    * Method to get option group id for event type
    *
    * @return array
-   * @throws CiviCRM_API3_Exception
+   * @throws CRM_Core_Exception
    */
   public function getOptionGroupId() {
     return civicrm_api3('OptionGroup', 'Getvalue', array('name' => 'event_type', 'return' => 'id'));

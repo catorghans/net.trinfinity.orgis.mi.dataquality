@@ -52,7 +52,7 @@ class CRM_Dataquality_OptionValue {
     }
     try {
       return civicrm_api3('OptionValue', 'Create', $this->_apiParams);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update option_value with name'.$this->_apiParams['name']
         .' in option group with id '.$this->_apiParams['option_group_id'].', error from API OptionValue Create: '
         .$ex->getMessage());
@@ -70,7 +70,7 @@ class CRM_Dataquality_OptionValue {
     $params = array('name' => $name, 'option_group_id' => $optionGroupId);
     try {
       return civicrm_api3('OptionValue', 'Getsingle', $params);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return array();
     }
   }

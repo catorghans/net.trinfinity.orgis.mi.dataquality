@@ -53,7 +53,7 @@ class CRM_Dataquality_RelationshipType {
     }
     try {
       civicrm_api3('RelationshipType', 'Create', $this->_apiParams);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update relationship type with name '.$this->_apiParams['name_a_b']
         .', error from API RelationshipType Create: '.$ex->getMessage());
     }
@@ -71,7 +71,7 @@ class CRM_Dataquality_RelationshipType {
     try {
       return civicrm_api3('RelationshipType', 'Getsingle',
         array('name_a_b' => $nameAb));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }

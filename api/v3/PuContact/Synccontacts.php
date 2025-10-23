@@ -13,7 +13,7 @@ function civicrm_api3_pu_contact_synccontacts ($params) {
 
     $lock = new CRM_Core_Lock('civimail.job.pusync');
     if (!$lock->isAcquired()) {
-        throw new API_Exception('Could not acquire lock, another pu sync process is running');
+        throw new CRM_Core_Exception('Could not acquire lock, another pu sync process is running');
     }
 
     $limit = CRM_Utils_Array::value('limit', $params, 0);

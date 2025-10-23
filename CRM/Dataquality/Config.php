@@ -281,7 +281,7 @@ class CRM_Dataquality_Config {
    *
    * @param $customField
    * @param $customFieldOptionGroupName
-   * @throws CiviCRM_API3_Exception
+   * @throws CRM_Core_Exception
    */
   protected function fixCustomFieldOptionGroups($customField, $customFieldOptionGroupName) {
     $optionGroup = CRM_Dataquality_Utils::getOptionGroupWithName($customFieldOptionGroupName);

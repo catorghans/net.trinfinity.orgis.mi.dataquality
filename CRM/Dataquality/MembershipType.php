@@ -99,7 +99,7 @@ class CRM_Dataquality_MembershipType {
           $this->_apiParams['financial_type_id'] = civicrm_api3('FinancialType', 'Getvalue',
             array('name' => $this->_apiParams['financial_type'], 'return' => 'id'));
           unset($this->_apiParams['financial_type']);
-        } catch (CiviCRM_API3_Exception $ex) {
+        } catch (CRM_Core_Exception $ex) {
           throw new Exception('Could not find a financial type with name ' . $this->_apiParams['financial_type']
             . ', so the membership type with name' . $this->_apiParams['name'] . ' can not be updated or created.
             Error from API FinancialType Getvalue: ' . $ex->getMessage());
@@ -111,7 +111,7 @@ class CRM_Dataquality_MembershipType {
           try {
             $this->_apiParams['financial_type_id'] = civicrm_api3('FinancialType', 'Getvalue',
               array('name' => 'Member Dues', 'return' => 'id'));
-          } catch (CiviCRM_API3_Exception $ex) {
+          } catch (CRM_Core_Exception $ex) {
             $this->_apiParams['financial_type_id'] = 1;
           }
         }
@@ -156,7 +156,7 @@ class CRM_Dataquality_MembershipType {
           $this->_apiParams['member_of_contact_id'] = civicrm_api3('Contact', 'Getvalue',
             array('sort_name' => $this->_apiParams['member_of_contact'], 'return' => 'id'));
           unset($this->_apiParams['member_of_contact']);
-        } catch (CiviCRM_API3_Exception $ex) {
+        } catch (CRM_Core_Exception $ex) {
           throw new Exception('Could not find a contact with sort_name ' . $this->_apiParams['member_of_contact']
             . ', so the membership type with name' . $this->_apiParams['name']
             . ' can not be updated or created. Error from API Contact Getvalue: ' . $ex->getMessage());
@@ -168,7 +168,7 @@ class CRM_Dataquality_MembershipType {
           try {
             $this->_apiParams['member_of_contact_id'] = civicrm_api3('Domain', 'Getvalue',
               array('id' => $this->_apiParams['domain_id'], 'return' => 'contact_id'));
-          } catch (CiviCRM_API3_Exception $ex) {
+          } catch (CRM_Core_Exception $ex) {
             throw new Exception('Could not find a domain ' . $this->_apiParams['domain_id']
               . ', the membership type with name' . $this->_apiParams['name'] . ' can not be updated or created.
               Error from API Domain Getvalue: ' . $ex->getMessage());
@@ -198,7 +198,7 @@ class CRM_Dataquality_MembershipType {
       if (isset($this->_apiParams['visibility'])) {
         $this->fixVisibility($membershipType['id'], $this->_apiParams['visibility']);
       }
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update membership type with name '.$this->_apiParams['name']
         .', error from API MembershipType Create: '.$ex->getMessage());
     }
@@ -227,7 +227,7 @@ class CRM_Dataquality_MembershipType {
   public function getWithName($name) {
     try {
       return civicrm_api3('MembershipType', 'Getsingle', array('name' => $name));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }

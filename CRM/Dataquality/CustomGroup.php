@@ -50,7 +50,7 @@ class CRM_Dataquality_CustomGroup {
     }
     try {
       $customGroup = civicrm_api3('CustomGroup', 'Create', $this->_apiParams);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update custom group with name ' . $this->_apiParams['name']
         . ' to extend ' . $this->_apiParams['extends'] . ', error from API CustomGroup Create: ' .
         $ex->getMessage() . ", parameters : " . implode(";", $this->_apiParams));
@@ -67,7 +67,7 @@ class CRM_Dataquality_CustomGroup {
   public function getWithName($name) {
     try {
       return civicrm_api3('CustomGroup', 'Getsingle', array('name' => $name));
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return FALSE;
     }
   }

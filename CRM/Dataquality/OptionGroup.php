@@ -52,7 +52,7 @@ class CRM_Dataquality_OptionGroup {
       if (isset($params['option_values'])) {
         $this->processOptionValues($optionGroup['id'], $params['option_values']);
       }
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       throw new Exception('Could not create or update option_group with name'
         .$this->_apiParams['name'].', error from API OptionGroup Create: ' . $ex->getMessage());
     }
@@ -82,7 +82,7 @@ class CRM_Dataquality_OptionGroup {
     $params = array('name' => $name);
     try {
       return civicrm_api3('OptionGroup', 'Getsingle', $params);
-    } catch (CiviCRM_API3_Exception $ex) {
+    } catch (CRM_Core_Exception $ex) {
       return array();
     }
   }
