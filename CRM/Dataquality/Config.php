@@ -17,7 +17,7 @@ class CRM_Dataquality_Config {
    */
   function __construct() {
 
-    $settings = civicrm_api3('Setting', 'Getsingle', array());
+    $settings = civicrm_api3('Setting', 'Getsingle', []);
     $resourcesPath = $settings['extensionsDir'].'/net.trinfinity.orgis.mi.dataquality/resources/';
     try {
       if (class_exists('Civi\Core\Paths')) {
@@ -286,11 +286,11 @@ class CRM_Dataquality_Config {
   protected function fixCustomFieldOptionGroups($customField, $customFieldOptionGroupName) {
     $optionGroup = CRM_Dataquality_Utils::getOptionGroupWithName($customFieldOptionGroupName);
     $qry = 'UPDATE civicrm_custom_field SET option_group_id = %1 WHERE id = %2';
-    $params = array(
-      1 => array($optionGroup['id'], 'Integer'),
-      2 => array($customField['id'], 'Integer')
-    );
+    $params = [
+      1 => [$optionGroup['id'], 'Integer'],
+      2 => [$customField['id'], 'Integer']
+    ];
     CRM_Core_DAO::executeQuery($qry, $params);
-    civicrm_api3('OptionGroup', 'Delete', array('id' => $customField['option_group_id']));
+    civicrm_api3('OptionGroup', 'Delete', ['id' => $customField['option_group_id']]);
   }
 }

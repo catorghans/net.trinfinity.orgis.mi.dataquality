@@ -8,13 +8,13 @@
  */
 class CRM_Dataquality_CustomGroup {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * CRM_Dataquality_CustomGroup constructor.
    */
   public function __construct() {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
   }
 
   /**
@@ -66,7 +66,7 @@ class CRM_Dataquality_CustomGroup {
    */
   public function getWithName($name) {
     try {
-      return civicrm_api3('CustomGroup', 'Getsingle', array('name' => $name));
+      return civicrm_api3('CustomGroup', 'Getsingle', ['name' => $name]);
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
     }
@@ -78,7 +78,7 @@ class CRM_Dataquality_CustomGroup {
    * @param array $params
    */
   protected function buildApiParams($params) {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
     foreach ($params as $name => $value) {
       if ($name != 'fields') {
         $this->_apiParams[$name] = $value;

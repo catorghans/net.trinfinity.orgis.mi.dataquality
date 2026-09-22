@@ -32,6 +32,6 @@ class CRM_Dataquality_EventType extends CRM_Dataquality_OptionValue {
    * @throws CiviCRM_API3_Exception
    */
   public function getOptionGroupId() {
-    return civicrm_api3('OptionGroup', 'Getvalue', array('name' => 'event_type', 'return' => 'id'));
+    return civicrm_api3('OptionGroup', 'Getvalue', ['name' => 'event_type', 'return' => 'id']);
   }
 }

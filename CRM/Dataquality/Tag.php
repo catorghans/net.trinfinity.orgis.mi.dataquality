@@ -8,13 +8,13 @@
  */
 class CRM_Dataquality_Tag {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * CRM_Dataquality_Tag constructor.
    */
   public function __construct() {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
   }
 
   /**
@@ -75,7 +75,7 @@ class CRM_Dataquality_Tag {
    */
   public function getWithName($name) {
     try {
-      return civicrm_api3('Tag', 'Getsingle', array('name' => $name));
+      return civicrm_api3('Tag', 'Getsingle', ['name' => $name]);
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
     }

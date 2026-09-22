@@ -20,7 +20,7 @@ class CRM_Dataquality_Utils {
    */
   public static function getCustomFieldWithNameCustomGroupId($customFieldName, $customGroupId) {
     try {
-      $customField = civicrm_api3('CustomField', 'Getsingle', array('name' => $customFieldName, 'custom_group_id' => $customGroupId));
+      $customField = civicrm_api3('CustomField', 'Getsingle', ['name' => $customFieldName, 'custom_group_id' => $customGroupId]);
       return $customField;
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
@@ -37,7 +37,7 @@ class CRM_Dataquality_Utils {
    */
   public static function getCustomGroupWithName($customGroupName) {
     try {
-      $customGroup = civicrm_api3('CustomGroup', 'Getsingle', array('name' => $customGroupName));
+      $customGroup = civicrm_api3('CustomGroup', 'Getsingle', ['name' => $customGroupName]);
       return $customGroup;
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
@@ -54,7 +54,7 @@ class CRM_Dataquality_Utils {
    */
   public static function getRelationshipTypeWithName($nameAB) {
     try {
-      $relationshipType = civicrm_api3('RelationshipType', 'Getsingle', array('name_a_b' => $nameAB));
+      $relationshipType = civicrm_api3('RelationshipType', 'Getsingle', ['name_a_b' => $nameAB]);
       return $relationshipType;
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
@@ -71,7 +71,7 @@ class CRM_Dataquality_Utils {
    */
   public static function getGroupWithName($groupName) {
     try {
-      $group = civicrm_api3('Group', 'Getsingle', array('name' => $groupName));
+      $group = civicrm_api3('Group', 'Getsingle', ['name' => $groupName]);
       return $group;
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
@@ -88,7 +88,7 @@ class CRM_Dataquality_Utils {
    */
   public static function getTagWithName($tagName) {
     try {
-      $tag = civicrm_api3('Tag', 'Getsingle', array('name' => $tagName));
+      $tag = civicrm_api3('Tag', 'Getsingle', ['name' => $tagName]);
       return $tag;
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
@@ -104,14 +104,14 @@ class CRM_Dataquality_Utils {
    * @static
    */
   public static function getOptionGroupWithName($optionGroupName) {
-    $params = array(
+    $params = [
       'name' => $optionGroupName,
-      'is_active' => 1);
+      'is_active' => 1];
     try {
       $optionGroup = civicrm_api3('OptionGroup', 'Getsingle', $params);
       return $optionGroup;
     } catch (CiviCRM_API3_Exception $ex) {
-      return array();
+      return [];
     }
   }
 
@@ -180,9 +180,9 @@ class CRM_Dataquality_Utils {
        */
       if (CRM_Core_BAO_Domain::version() < 4.5) {
         $query = 'UPDATE civicrm_group SET name = %1 WHERE id = %2';
-        $queryParams = array(
-          1 => array($params['name'], 'String'),
-          2 => array($group['id'], 'Integer'));
+        $queryParams = [
+          1 => [$params['name'], 'String'],
+          2 => [$group['id'], 'Integer']];
         CRM_Core_DAO::executeQuery($query, $queryParams);
       }
       $groupData = $group['values'];
@@ -237,7 +237,7 @@ class CRM_Dataquality_Utils {
    * @static
    */
   public static function createRelationshipType($params) {
-    $relationshipType = array();
+    $relationshipType = [];
     if (!isset($params['name_a_b']) || empty($params['name_a_b']) || !isset($params['name_b_a']) || empty($params['name_b_a'])) {
       throw new Exception('When trying to create a Relationship Type name_a_b and name_b_a are mandatory parameter and
       can not be empty');
@@ -351,16 +351,16 @@ class CRM_Dataquality_Utils {
    * @static
    */
   public static function getOptionGroupList($optionGroupName) {
-    $valueList = array();
-    $optionGroupParams = array(
+    $valueList = [];
+    $optionGroupParams = [
       'name' => $optionGroupName,
-      'return' => 'id');
+      'return' => 'id'];
     try {
       $optionGroupId = civicrm_api3('OptionGroup', 'Getvalue', $optionGroupParams);
-      $optionValueParams = array(
+      $optionValueParams = [
         'option_group_id' => $optionGroupId,
         'is_active' => 1,
-        'options' => array('limit' => 99999));
+        'options' => ['limit' => 99999]];
       $optionValues = civicrm_api3('OptionValue', 'Get', $optionValueParams);
       foreach ($optionValues['values'] as $optionValue) {
         $valueList[$optionValue['value']] = $optionValue['label'];
@@ -389,11 +389,11 @@ class CRM_Dataquality_Utils {
     }
     // first get all existing custom fields from the custom group
     try {
-      $existingCustomFields = civicrm_api3('CustomField', 'Get', array('custom_group_id' => $customGroupId));
+      $existingCustomFields = civicrm_api3('CustomField', 'Get', ['custom_group_id' => $customGroupId]);
       foreach ($existingCustomFields['values'] as $existingId => $existingField) {
         // if existing field not in config custom data, delete custom field
         if (!isset($configCustomGroupData['fields'][$existingField['name']])) {
-          civicrm_api3('CustomField', 'Delete', array('id' => $existingId));
+          civicrm_api3('CustomField', 'Delete', ['id' => $existingId]);
         }
       }
     } catch (CiviCRM_API3_Exception $ex) {

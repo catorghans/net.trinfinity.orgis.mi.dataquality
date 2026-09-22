@@ -8,13 +8,13 @@
  */
 class CRM_Dataquality_CustomField {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * CRM_Dataquality_CustomField constructor.
    */
   public function __construct() {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
   }
 
   /**
@@ -36,7 +36,7 @@ class CRM_Dataquality_CustomField {
       if (!empty($found)) {
         $this->_apiParams['option_group_id'] = $found['id'];
       } else {
-        $created = $optionGroup->create(array('name' => $this->_apiParams['option_group']));
+        $created = $optionGroup->create(['name' => $this->_apiParams['option_group']]);
         $this->_apiParams['option_group_id'] = $created['id'];
       }
       if (empty($this->_apiParams['option_type'])){
@@ -81,7 +81,7 @@ class CRM_Dataquality_CustomField {
    */
   public function getWithNameCustomGroupId($name, $customGroupId) {
     try {
-      return civicrm_api3('CustomField', 'Getsingle', array('name' => $name, 'custom_group_id' => $customGroupId));
+      return civicrm_api3('CustomField', 'Getsingle', ['name' => $name, 'custom_group_id' => $customGroupId]);
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
     }
@@ -101,12 +101,12 @@ class CRM_Dataquality_CustomField {
     // only if found is not equal to created custom field value
     if ($found['id'] != $customField[key($customField)]['option_group_id']) {
       $qry = 'UPDATE civicrm_custom_field SET option_group_id = %1 WHERE id = %2';
-      $params = array(
-        1 => array($found['id'], 'Integer'),
-        2 => array(key($customField), 'Integer')
-      );
+      $params = [
+        1 => [$found['id'], 'Integer'],
+        2 => [key($customField), 'Integer']
+      ];
       CRM_Core_DAO::executeQuery($qry, $params);
-      civicrm_api3('OptionGroup', 'Delete', array('id' => $customField[key($customField)]['option_group_id']));
+      civicrm_api3('OptionGroup', 'Delete', ['id' => $customField[key($customField)]['option_group_id']]);
     }
   }
 
@@ -125,11 +125,11 @@ class CRM_Dataquality_CustomField {
     }
     // first get all existing custom fields from the custom group
     try {
-      $existingCustomFields = civicrm_api3('CustomField', 'Get', array('custom_group_id' => $customGroupId));
+      $existingCustomFields = civicrm_api3('CustomField', 'Get', ['custom_group_id' => $customGroupId]);
       foreach ($existingCustomFields['values'] as $existingId => $existingField) {
         // if existing field not in config custom data, delete custom field
         if (!isset($configCustomGroupData['fields'][$existingField['name']])) {
-          civicrm_api3('CustomField', 'Delete', array('id' => $existingId));
+          civicrm_api3('CustomField', 'Delete', ['id' => $existingId]);
         }
       }
     } catch (CiviCRM_API3_Exception $ex) {

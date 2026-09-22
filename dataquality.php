@@ -34,13 +34,13 @@ function dataquality_civicrm_install() {
     _dataquality_civix_civicrm_install();
 
     //check 2nd PuChanges activity type due to name change
-    $result = civicrm_api3('Job', 'getcount', array(
+    $result = civicrm_api3('Job', 'getcount', [
         'sequential' => 1,
         'name' => "Pu Automation",
-    ));
+    ]);
 
     if ($result["result"] == 0){
-        $params = array(
+        $params = [
             'sequential' => 1,
             'name'          => 'Pu Automation',
             'description'   => 'Recalc Automated Pu Values',
@@ -48,7 +48,7 @@ function dataquality_civicrm_install() {
             'api_entity'    => 'PuContact',
             'api_action'    => 'synccontacts',
             'is_active'     => 0,
-        );
+        ];
         $result = civicrm_api3('job', 'create', $params);
     }
 
@@ -64,18 +64,18 @@ function dataquality_civicrm_uninstall() {
   _dataquality_civix_civicrm_uninstall();
 
     try {
-        $result = civicrm_api3('Job', 'get', array(
+        $result = civicrm_api3('Job', 'get', [
             'sequential' => 1,
             'return' => "id",
             'name' => "Pu Automation",
-        ));
+        ]);
     } catch (Exception $e){
         CRM_Core_Error::debug_log_message("MI CUSTOM error:".$e->getMessage());
         return;
     }
 
     foreach ($result["values"] as $job){
-        $params = array();
+        $params = [];
         $params["id"] = $job["id"];
 
         $result2 = civicrm_api("Job",'delete', $params);
@@ -92,14 +92,14 @@ function dataquality_civicrm_enable() {
 
   _dataquality_civix_civicrm_enable();
 
-    $result = civicrm_api3('Job', 'getcount', array(
+    $result = civicrm_api3('Job', 'getcount', [
         'sequential' => 1,
         'name' => "Pu Automation",
-    ));
+    ]);
 
 
     if ($result == 0){
-        $params = array(
+        $params = [
             'sequential' => 1,
             'name'          => 'Pu Automation',
             'description'   => 'Recalc Automated Pu Values',
@@ -107,7 +107,7 @@ function dataquality_civicrm_enable() {
             'api_entity'    => 'PuContact',
             'api_action'    => 'synccontacts',
             'is_active'     => 0,
-        );
+        ];
         $result2 = civicrm_api3('job', 'create', $params);
     }
 
@@ -124,18 +124,18 @@ function dataquality_civicrm_disable() {
 
     //delete job
     try {
-        $result = civicrm_api3('Job', 'get', array(
+        $result = civicrm_api3('Job', 'get', [
             'sequential' => 1,
             'return' => "id",
             'name' => "Pu Automation",
-        ));
+        ]);
     } catch (Exception $e){
         CRM_Core_Error::debug_log_message("MI CUSTOM error:".$e->getMessage());
         return;
     }
 
     foreach ($result["values"] as $job){
-        $params = array();
+        $params = [];
         $params["id"] = $job["id"];
 
         $result2 = civicrm_api("Job",'delete', $params);
@@ -405,17 +405,17 @@ function dataquality_civicrm_custom( $op, $groupID, $entityID, &$params ) {
 function dataquality_civicrm_permission(&$permissions) {
   $version = CRM_Utils_System::version();
   if (version_compare($version, '4.6.1') >= 0) {
-    $permissions += array(
-      'access Pu Fields' => array(
-        ts('Access Pu Fields', array('domain' => 'net.trinfinity.orgis.mi.dataquality')),
-        ts('Grants the necessary permissions to access the Pu Fields', array('domain' => 'net.trinfinity.orgis.mi.dataquality')),
-      ),
-    );
+    $permissions += [
+      'access Pu Fields' => [
+        ts('Access Pu Fields', ['domain' => 'net.trinfinity.orgis.mi.dataquality']),
+        ts('Grants the necessary permissions to access the Pu Fields', ['domain' => 'net.trinfinity.orgis.mi.dataquality']),
+      ],
+    ];
   }
   else {
-    $permissions += array(
-      'access Pu Fields' => ts('Access Pu Fields', array('domain' => 'net.trinfinity.orgis.mi.dataquality')),
-    );
+    $permissions += [
+      'access Pu Fields' => ts('Access Pu Fields', ['domain' => 'net.trinfinity.orgis.mi.dataquality']),
+    ];
   }
 }
 

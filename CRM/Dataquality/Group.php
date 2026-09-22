@@ -8,13 +8,13 @@
  */
 class CRM_Dataquality_Group {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * CRM_Dataquality_Group constructor.
    */
   public function __construct() {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
   }
   /**
    * Method to validate params for create
@@ -61,7 +61,7 @@ class CRM_Dataquality_Group {
    */
   public function getWithName($groupName) {
     try {
-      return civicrm_api3('Group', 'Getsingle', array('name' => $groupName));
+      return civicrm_api3('Group', 'Getsingle', ['name' => $groupName]);
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
     }
@@ -104,9 +104,9 @@ class CRM_Dataquality_Group {
   private function fixName($group) {
     if (CRM_Core_BAO_Domain::version() < 4.5) {
       $query = 'UPDATE civicrm_group SET name = %1 WHERE id = %2';
-      $queryParams = array(
-        1 => array($this->_apiParams['name'], 'String'),
-        2 => array($group['id'], 'Integer'));
+      $queryParams = [
+        1 => [$this->_apiParams['name'], 'String'],
+        2 => [$group['id'], 'Integer']];
       CRM_Core_DAO::executeQuery($query, $queryParams);
     }
   }

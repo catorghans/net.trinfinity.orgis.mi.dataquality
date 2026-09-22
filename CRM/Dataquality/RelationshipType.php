@@ -8,13 +8,13 @@
  */
 class CRM_Dataquality_RelationshipType {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * CRM_Dataquality_RelationshipType constructor.
    */
   public function __construct() {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
   }
 
   /**
@@ -70,7 +70,7 @@ class CRM_Dataquality_RelationshipType {
   public function getWithNameAb($nameAb) {
     try {
       return civicrm_api3('RelationshipType', 'Getsingle',
-        array('name_a_b' => $nameAb));
+        ['name_a_b' => $nameAb]);
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
     }
