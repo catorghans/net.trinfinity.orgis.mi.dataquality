@@ -8,7 +8,7 @@
 function civicrm_api3_pu_contact_synccontacts ($params) {
 
   //get enabled contacts
-    $parameters = array();
+    $parameters = [];
     $sql = "select id from civicrm_contact where is_deleted = 0";
 
     $lock = new CRM_Core_Lock('civimail.job.pusync');
@@ -31,7 +31,7 @@ function civicrm_api3_pu_contact_synccontacts ($params) {
         $dpu = new CRM_Dataquality_PuAutomation();
         $errorScope = CRM_Core_TemporaryErrorScope::useException();
         $dao = CRM_Core_DAO::executeQuery($sql,$parameters);
-        $values = array();
+        $values = [];
         while ($dao->fetch()) {
             $values = $dao->toArray();
 

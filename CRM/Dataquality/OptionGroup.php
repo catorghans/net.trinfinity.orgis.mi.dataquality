@@ -8,13 +8,13 @@
  */
 class CRM_Dataquality_OptionGroup {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * CRM_Dataquality_OptionGroup constructor.
    */
   public function __construct() {
-    $this->_apiParams = array();
+    $this->_apiParams = [];
   }
   /**
    * Method to validate params for create
@@ -79,11 +79,11 @@ class CRM_Dataquality_OptionGroup {
    * @return array|boolean
    */
   public function getWithName($name) {
-    $params = array('name' => $name);
+    $params = ['name' => $name];
     try {
       return civicrm_api3('OptionGroup', 'Getsingle', $params);
     } catch (CiviCRM_API3_Exception $ex) {
-      return array();
+      return [];
     }
   }
 }

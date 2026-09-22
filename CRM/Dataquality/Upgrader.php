@@ -67,9 +67,9 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
 
 
         try {
-            $result = civicrm_api3('CustomField', 'get', array(
+            $result = civicrm_api3('CustomField', 'get', [
                 'name' => "new_pu_value",
-            ));
+            ]);
             if ($result["id"]) {
                 $pu_value_field = "custom_" . $result["id"];
 
@@ -80,9 +80,9 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             // if it fails then for some reason this old table likely does not exist, not harm done.
         }
         try {
-            $result = civicrm_api3('CustomField', 'get', array(
+            $result = civicrm_api3('CustomField', 'get', [
                 'name' => "new_pu_description",
-            ));
+            ]);
             if ($result["id"]) {
                 $pu_description_field = "custom_" . $result["id"];
 
@@ -92,10 +92,10 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             // if it fails then for some reason this old table likely does not exist, not harm done.
         }
         try {
-            $result = civicrm_api3('CustomField', 'get', array(
+            $result = civicrm_api3('CustomField', 'get', [
                 'name' => "new_pu_action",
 
-            ));
+            ]);
             if ($result["id"]){
                 $pu_action_field = "custom_".$result["id"];
 
@@ -104,9 +104,9 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             // if it fails then for some reason this old table likely does not exist, not harm done.
         }
         try {
-            $result = civicrm_api3('CustomField', 'get', array(
+            $result = civicrm_api3('CustomField', 'get', [
                 'name' => "new_pu_how",
-            ));
+            ]);
             if ($result["id"]){
                 $pu_how_field = "custom_".$result["id"];
 
@@ -115,14 +115,14 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
             // if it fails then for some reason this old table likely does not exist, not harm done.
         }
         try {
-            $parameters = array();
+            $parameters = [];
             $sql = "select p.pu_overview_1 as value, p.pu_contact_2 as description, p.pu_action_3 as action, p.pu_how_4 as how, c.id
          from civicrm_contact c left join civicrm_value_pu_fields_1 p ON c.id = p.entity_id
          where p.pu_overview_1 > 1;
          ";
             $errorScope = CRM_Core_TemporaryErrorScope::useException();
             $dao = CRM_Core_DAO::executeQuery($sql, $parameters);
-            $value = array();
+            $value = [];
             while ($dao->fetch()) {
                 $value = $dao->toArray();
 
@@ -138,7 +138,7 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
                     $pu_value = 3;
                 }
 
-                $result = civicrm_api3('Activity', 'create', array(
+                $result = civicrm_api3('Activity', 'create', [
                     "activity_type_id" => "puChanges",
                     $pu_value_field =>$pu_value,
                     $pu_description_field => $value["description"],
@@ -147,7 +147,7 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
                     "status_id" => "Scheduled",
                     'target_contact_id' => $value["id"],
                     'subject' => $value["description"],
-                ));
+                ]);
             }
 
         } catch (Exception $e) {
@@ -157,44 +157,44 @@ class CRM_Dataquality_Upgrader extends CRM_Dataquality_Upgrader_Base
         //remove existing Report.
 
         try {
-            $result = civicrm_api3('ReportInstance', 'get', array(
+            $result = civicrm_api3('ReportInstance', 'get', [
                 'sequential' => 1,
                 'report_id' => "net.trinfinity.orgis.mi.dataquality/pureport",
-                'options' => array('limit' => 1000),
-            ));
+                'options' => ['limit' => 1000],
+            ]);
 
             if (isset($result["values"])) foreach ($result["values"] as $report) {
                 $id = $report["id"];
-                civicrm_api3("ReportInstance" , "delete" , array("id" => $id));
+                civicrm_api3("ReportInstance" , "delete" , ["id" => $id]);
             }
 
-            $result = civicrm_api3('ReportTemplate', 'get', array(
+            $result = civicrm_api3('ReportTemplate', 'get', [
                 'sequential' => 1,
                 'value' => "net.trinfinity.orgis.mi.dataquality/pureport",
-            ));
+            ]);
             if (isset($result["values"])) foreach ($result["values"] as $report) {
                 $id = $report["id"];
-                civicrm_api3("ReportTemplate" , "delete" , array("id" => $id));
+                civicrm_api3("ReportTemplate" , "delete" , ["id" => $id]);
             }
 
             //remove custom fields;
-            $result = civicrm_api3('CustomGroup', 'getsingle', array(
+            $result = civicrm_api3('CustomGroup', 'getsingle', [
                 'sequential' => 1,
                 'return' => "id",
                 'name' => "Pu_fields",
-            ));
+            ]);
             if (isset($result["id"]) && is_numeric($result["id"])){
                 $groupid = $result["id"];
 
-                $fieldresults = civicrm_api3('CustomField', 'get', array(
+                $fieldresults = civicrm_api3('CustomField', 'get', [
                     'sequential' => 1,
                     'return' => "id",
                     'custom_group_id' => $groupid,
-                ));
+                ]);
                 if (isset($fieldresults["values"])) foreach($fieldresults["values"] as $field){
-                    civicrm_api3("CustomField","delete", array("id" => $field["id"]));
+                    civicrm_api3("CustomField","delete", ["id" => $field["id"]]);
                 }
-                civicrm_api3("CustomGroup", "delete", array("id" => $groupid));
+                civicrm_api3("CustomGroup", "delete", ["id" => $groupid]);
             }
             } catch (Exception $e) {
             // if it fails then for some reason this old table likely does not exist, no harm done.

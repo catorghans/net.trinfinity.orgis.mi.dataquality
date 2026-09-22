@@ -8,7 +8,7 @@
  */
 class CRM_Dataquality_ContactType {
 
-  protected $_apiParams = array();
+  protected $_apiParams = [];
 
   /**
    * Method to validate params for create
@@ -57,7 +57,7 @@ class CRM_Dataquality_ContactType {
    */
   public function getWithName($contactTypeName) {
     try {
-      return civicrm_api3('ContactType', 'Getsingle', array('name' => $contactTypeName));
+      return civicrm_api3('ContactType', 'Getsingle', ['name' => $contactTypeName]);
     } catch (CiviCRM_API3_Exception $ex) {
       return FALSE;
     }

@@ -28,53 +28,53 @@ class CRM_Dataquality_PuAutomation
      */
     public function __construct()
     {
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' => "new_pu_value",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_value_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' => "new_pu_description",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_description_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' => "new_pu_action",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_action_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' => "new_pu_how",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_how_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' => "Automation_Type",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_automationtype_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' =>  "Pu_Automation",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_automation_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' =>  "Pu_value_addition",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_value_addition_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' =>  "Automated_Pu_Description",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_automation_description_field = "custom_".$result["id"]; }
 
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' =>  "Automated_Pu_Action",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_automation_action_field = "custom_".$result["id"]; }
-        $result = civicrm_api3('CustomField', 'get', array(
+        $result = civicrm_api3('CustomField', 'get', [
             'name' =>  "Automated_Pu_How",
-        ));
+        ]);
         if ($result["id"]){ $this->pu_automation_how_field = "custom_".$result["id"]; }
     }
 
@@ -84,15 +84,15 @@ class CRM_Dataquality_PuAutomation
         //Get pu Groups
 
         if ($this->pu_automation_smart_groups == Null || $enforce){
-            $this->pu_automation_smart_groups = array();
+            $this->pu_automation_smart_groups = [];
 
-            $resultgroups = civicrm_api3('Group', 'get', array(
+            $resultgroups = civicrm_api3('Group', 'get', [
                 'sequential' => 1,
                 'return' => "id,name,saved_search_id,".$this->pu_value_addition_field.",title,".$this->pu_automation_action_field.",".$this->pu_automation_description_field.",".$this->pu_automation_how_field,
-                $this->pu_value_addition_field => array('>=' => 1),
+                $this->pu_value_addition_field => ['>=' => 1],
                 'is_active' => 1,
-                'options' => array('limit' => 100000),
-            ));
+                'options' => ['limit' => 100000],
+            ]);
             CRM_Core_Error::debug_log_message("pu vaf:".$this->pu_value_addition_field." all groups for ".print_r($resultgroups,true));
 
             if ($resultgroups["is_error"] == 0) {
@@ -116,7 +116,7 @@ class CRM_Dataquality_PuAutomation
         $error = Null;
         $is_error = 0;
         $pu_activities = Null;
-        $parameters = array();
+        $parameters = [];
 
         $sql = "select h.*,a.status_id
             from civicrm_value_pu_history_fields h inner join civicrm_activity a ON h.entity_id = a.id
@@ -129,7 +129,7 @@ class CRM_Dataquality_PuAutomation
         try{
             $errorScope = CRM_Core_TemporaryErrorScope::useException();
             $dao = CRM_Core_DAO::executeQuery($sql,$parameters);
-            $pu_activities = array();
+            $pu_activities = [];
             while ($dao->fetch()) {
                 $pu_activities[] = $dao->toArray();
             }
@@ -174,7 +174,7 @@ class CRM_Dataquality_PuAutomation
                     $pu_action = isset($group[$this->pu_automation_action_field])?$group[$this->pu_automation_action_field]:"";
                     $pu_how = isset($group[$this->pu_automation_how_field])?$group[$this->pu_automation_how_field]:"";
                     $subject = $pu_desc;
-                    $params = array("activity_type_id" => "puChanges",
+                    $params = ["activity_type_id" => "puChanges",
                         "status_id" => 1,
                         $this->pu_value_field => $pu_value,
                         $this->pu_description_field => $pu_desc,
@@ -184,7 +184,7 @@ class CRM_Dataquality_PuAutomation
                         'subject' => $subject,
                         $this->pu_automationtype_field => $this->pu_automation_type_start.$group["id"],
                         $this->pu_automation_field => 1,
-                    );
+                    ];
                     $resultactivity = civicrm_api3('Activity', 'create', $params);
         //            CRM_Core_Error::debug_log_message("pu activity created:".print_r($resultactivity,true));
 
@@ -201,8 +201,8 @@ class CRM_Dataquality_PuAutomation
                         $pu_activity["found"] = true;
                         //close it
                         if ($pu_activity["status_id"] == "1") {
-                            $params = array("id" => $pu_activity["entity_id"],
-                                "status_id" => 2);
+                            $params = ["id" => $pu_activity["entity_id"],
+                                "status_id" => 2];
                             $resultactivity = civicrm_api3('Activity', 'create', $params);
                             //          CRM_Core_Error::debug_log_message("pu activity updated:".print_r($resultactivity,true));
                             break;
@@ -222,8 +222,8 @@ class CRM_Dataquality_PuAutomation
                 if (substr($pu_activity["automation_type_74"],0, strlen($this->pu_automation_type_start)) === $this->pu_automation_type_start) {
 
                     //close it
-                    $params = array("id" => $pu_activity["entity_id"],
-                        "status_id" => 2);
+                    $params = ["id" => $pu_activity["entity_id"],
+                        "status_id" => 2];
                     $resultactivity = civicrm_api3('Activity', 'create', $params);
           //          CRM_Core_Error::debug_log_message("pu activity closed, no group:" . print_r($pu_activity, true) . print_r($resultactivity, true));
                 }

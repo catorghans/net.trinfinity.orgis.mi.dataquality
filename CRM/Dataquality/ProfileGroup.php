@@ -8,7 +8,7 @@
  */
 class CRM_Dataquality_ProfileGroup
 {
-    protected $_apiParams = array();
+    protected $_apiParams = [];
 
     /**
      * CRM_Dataquality_ProfileGroup constructor.
@@ -58,7 +58,7 @@ class CRM_Dataquality_ProfileGroup
      */
     public function getProfileGroupWithName() {
         try {
-            $groups = civicrm_api3('UFGroup', 'Get', array('name' => array('LIKE' => $this->_apiParams['name']."%")));
+            $groups = civicrm_api3('UFGroup', 'Get', ['name' => ['LIKE' => $this->_apiParams['name']."%"]]);
             $foundgroup = null;
 
             foreach ($groups["values"] as $groupid => $group){

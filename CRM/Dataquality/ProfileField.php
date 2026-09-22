@@ -8,7 +8,7 @@
  */
 class CRM_Dataquality_ProfileField
 {
-    protected $_apiParams = array();
+    protected $_apiParams = [];
 
     /**
      * CRM_Dataquality_ProfileField constructor.
@@ -60,20 +60,20 @@ class CRM_Dataquality_ProfileField
                     $table = $name_array[1];
                     $fieldname = $name_array[2];
 
-                    $customfieldgroup = civicrm_api3('CustomGroup', 'getsingle', array(
+                    $customfieldgroup = civicrm_api3('CustomGroup', 'getsingle', [
                         'sequential' => 1,
                         'return' => "id",
                         'table_name' => $table,
-                    ));
+                    ]);
                     $customfieldgroupid = $customfieldgroup["id"];
 
                     if ($customfieldgroupid){
 
-                        $customfield = civicrm_api3('CustomField', 'getsingle', array(
+                        $customfield = civicrm_api3('CustomField', 'getsingle', [
                             'sequential' => 1,
                             'custom_group_id' => $customfieldgroupid,
                             'name' => $fieldname,
-                        ));
+                        ]);
 
 
 
@@ -85,7 +85,7 @@ class CRM_Dataquality_ProfileField
                 }
             }
 
-            $tag = civicrm_api3('UFField', 'Getsingle', array('field_name' => $this->_apiParams['field_name']));
+            $tag = civicrm_api3('UFField', 'Getsingle', ['field_name' => $this->_apiParams['field_name']]);
             return $tag;
         } catch (CiviCRM_API3_Exception $ex) {
             return FALSE;
